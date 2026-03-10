@@ -133,7 +133,7 @@ VegiX/
    npm run dev
    ```
    
-   The backend will run on `http://localhost:5000`
+  
 
 ### Frontend Setup
 
@@ -153,15 +153,14 @@ VegiX/
    ```
    Edit `frontend/.env`:
    ```
-   VITE_API_URL=http://localhost:5000
-   ```
+
 
 4. **Start the development server:**
    ```bash
    npm run dev
    ```
    
-   The frontend will run on `http://localhost:3000`
+
 
 ### Required Environment Variables
 
@@ -180,29 +179,11 @@ VegiX/
 #### Frontend (`frontend/.env`)
 | Variable | Required | Description |
 |---|---|---|
-| `VITE_API_URL` | ❌ | Backend API base URL (default: http://localhost:5000) |
+
 
 ## 🔐 Authentication
 
-### Login Credentials (Demo)
 
-```
-Admin Account:
-Email: admin@vegix.com
-Password: password123
-
-Farmer Account:
-Email: farmer@vegix.com
-Password: password123
-
-Broker Account:
-Email: broker@vegix.com
-Password: password123
-
-Buyer Account:
-Email: buyer@vegix.com
-Password: password123
-```
 
 ## 📡 API Endpoints
 
@@ -268,11 +249,7 @@ Password: password123
    MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/VegiX?retryWrites=true&w=majority
    ```
 
-### Using Local MongoDB
 
-```
-MONGO_URI=mongodb://localhost:27017/VegiX
-```
 
 ## 🌐 Deployment
 
