@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import VegetableSelect from '../components/VegetableSelect';
 import '../styles/BrokerBuyer.css';
-import { API_BASE_URL } from '../services/api';
+import API from '../services/api';
 
 const BuyerDemand = () => {
     const [formData, setFormData] = useState({
@@ -42,10 +41,7 @@ const BuyerDemand = () => {
 
     const fetchMyDemands = async () => {
         try {
-            const token = localStorage.getItem('token');
-            const res = await axios.get(`${API_BASE_URL}/api/buyer/my-demands`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const res = await API.get('/buyer/my-demands');
             setMyDemands(res.data || []);
         } catch (error) {
             console.error('Error fetching demands:', error);
@@ -57,10 +53,7 @@ const BuyerDemand = () => {
     const handleDelete = async (demandId) => {
         if (!window.confirm('Are you sure you want to delete this demand?')) return;
         try {
-            const token = localStorage.getItem('token');
-            await axios.delete(`${API_BASE_URL}/api/buyer/demand/${demandId}`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            await API.delete(`/buyer/demand/${demandId}`);
             setMyDemands(myDemands.filter(d => d._id !== demandId));
             alert('Demand deleted!');
         } catch (error) {
@@ -72,11 +65,8 @@ const BuyerDemand = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const token = localStorage.getItem('token');
             const vegId = Array.isArray(formData.vegetableId) ? formData.vegetableId[0] : formData.vegetableId;
-            await axios.post(`${API_BASE_URL}/api/buyer/demand`, { ...formData, vegetableId: vegId }, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            await API.post('/buyer/demand', { ...formData, vegetableId: vegId });
             setMessage('Demand published successfully! Brokers will contact you soon.');
             setFormData({
                 vegetableId: '',

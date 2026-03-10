@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import ChartCard from '../components/ChartCard';
 import StatCard from '../components/StatCard';
@@ -9,9 +8,7 @@ import '../styles/BrokerBuyer.css';
 import '../components/StatCard.css';
 import '../components/Card.css';
 import '../components/Button.css';
-import { API_BASE_URL } from '../services/api';
-
-const API_URL = `${API_BASE_URL}/api/broker`;
+import API from '../services/api';
 
 const BrokerDashboard = ({ user }) => {
   const { t } = useTranslation();
@@ -45,10 +42,7 @@ const BrokerDashboard = ({ user }) => {
   const fetchBuyOrders = useCallback(async () => {
     try {
       setBuyOrdersError('');
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_URL}/buy-orders`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await API.get('/broker/buy-orders');
       if (isMountedRef.current) {
         setBuyOrders(response.data.orders || []);
       }
@@ -67,10 +61,7 @@ const BrokerDashboard = ({ user }) => {
   // FETCH: Sell Orders
   const fetchSellOrders = useCallback(async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_URL}/dashboard`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await API.get('/broker/dashboard');
       if (isMountedRef.current) {
         setSellOrders(response.data.sellOrders || []);
       }
@@ -86,10 +77,7 @@ const BrokerDashboard = ({ user }) => {
   // FETCH: Wallet Balance
   const fetchWalletBalance = useCallback(async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_URL}/wallet`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await API.get('/broker/wallet');
       if (isMountedRef.current) {
         setWalletBalance(response.data.walletBalance || 0);
       }
@@ -110,11 +98,7 @@ const BrokerDashboard = ({ user }) => {
 
     try {
       setAddingFunds(true);
-      const token = localStorage.getItem('token');
-      const response = await axios.post(`${API_URL}/wallet/add`,
-        { amount },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const response = await API.post('/broker/wallet/add', { amount });
 
       if (response.data.success) {
         setWalletBalance(response.data.walletBalance);
@@ -202,10 +186,7 @@ const BrokerDashboard = ({ user }) => {
   // ACTION: Cancel Buy Order
   const handleCancelOrder = async (orderId) => {
     try {
-      const token = localStorage.getItem('token');
-      await axios.delete(`${API_URL}/buy-orders/${orderId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await API.delete(`/broker/buy-orders/${orderId}`);
     } catch (error) {
       console.error('Error cancelling order:', error);
       alert(error.response?.data?.message || 'Failed to cancel order');
@@ -215,10 +196,7 @@ const BrokerDashboard = ({ user }) => {
   // ACTION: End Buy Order
   const handleEndOrder = async (orderId) => {
     try {
-      const token = localStorage.getItem('token');
-      await axios.put(`${API_URL}/buy-orders/${orderId}/end`, {}, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await API.put(`/broker/buy-orders/${orderId}/end`);
     } catch (error) {
       console.error('Error ending order:', error);
       alert(error.response?.data?.message || 'Failed to end order');
@@ -228,10 +206,7 @@ const BrokerDashboard = ({ user }) => {
   // ACTION: Delete Buy Order (Permanent)
   const handleDeleteOrder = async (orderId) => {
     try {
-      const token = localStorage.getItem('token');
-      await axios.delete(`${API_URL}/buy-orders/${orderId}/permanent`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await API.delete(`/broker/buy-orders/${orderId}/permanent`);
     } catch (error) {
       console.error('Error deleting order:', error);
       alert(error.response?.data?.message || 'Failed to delete order');

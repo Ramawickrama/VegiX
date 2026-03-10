@@ -1,10 +1,19 @@
 import axios from "axios";
 
-// Single source of truth — all components should import this
-export const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const envApiUrl = import.meta.env.VITE_API_URL || "";
+
+export const API_BASE_URL = envApiUrl 
+    ? (envApiUrl.startsWith('/') ? envApiUrl : envApiUrl)
+    : "http://localhost:5000";
+
+const baseUrl = !envApiUrl || envApiUrl === "/api"
+    ? "/api" 
+    : `${API_BASE_URL}/api`;
+
+export const API_FULL_BASE_URL = baseUrl;
 
 const API = axios.create({
-    baseURL: `${API_BASE_URL}/api`,
+    baseURL: baseUrl,
     withCredentials: true
 });
 

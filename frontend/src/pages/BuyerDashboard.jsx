@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import ChartCard from '../components/ChartCard';
 import StatCard from '../components/StatCard';
@@ -8,7 +7,7 @@ import '../styles/BrokerBuyer.css';
 import '../components/StatCard.css';
 import '../components/Card.css';
 import '../components/Button.css';
-import { API_BASE_URL } from '../services/api';
+import API from '../services/api';
 
 const BuyerDashboard = ({ user }) => {
   const { t } = useTranslation();
@@ -28,14 +27,9 @@ const BuyerDashboard = ({ user }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem('token');
         const [demandsRes, brokerRes] = await Promise.all([
-          axios.get(`${API_BASE_URL}/api/buyer/my-demands`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          axios.get(`${API_BASE_URL}/api/buyer/market-orders`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
+          API.get('/buyer/my-demands'),
+          API.get('/buyer/market-orders'),
         ]);
         setDemands(demandsRes.data || []);
         setBrokerOrders(brokerRes.data.posts || []);
@@ -59,12 +53,7 @@ const BuyerDashboard = ({ user }) => {
 
   const handleSaveEdit = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const res = await axios.put(
-        `${API_BASE_URL}/api/buyer/demand/${editingDemand._id}`,
-        editForm,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await API.put(`/buyer/demand/${editingDemand._id}`, editForm);
 
       if (res.data.success) {
         setDemands(demands.map(d => d._id === editingDemand._id ? res.data.demand : d));
@@ -80,10 +69,7 @@ const BuyerDashboard = ({ user }) => {
     if (!window.confirm(t('demands.confirmDelete'))) return;
 
     try {
-      const token = localStorage.getItem('token');
-      await axios.delete(`${API_BASE_URL}/api/buyer/demand/${demandId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await API.delete(`/buyer/demand/${demandId}`);
       setDemands(demands.filter(d => d._id !== demandId));
     } catch (error) {
       console.error('Error deleting demand:', error);
@@ -93,12 +79,7 @@ const BuyerDashboard = ({ user }) => {
 
   const handleStatusChange = async (demandId, newStatus) => {
     try {
-      const token = localStorage.getItem('token');
-      const res = await axios.put(
-        `${API_BASE_URL}/api/buyer/demand/${demandId}`,
-        { status: newStatus },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await API.put(`/buyer/demand/${demandId}`, { status: newStatus });
 
       if (res.data.success) {
         setDemands(demands.map(d => d._id === demandId ? res.data.demand : d));
