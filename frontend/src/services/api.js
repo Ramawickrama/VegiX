@@ -6,7 +6,7 @@ export const API_BASE_URL = envApiUrl
     ? (envApiUrl.startsWith('/') ? envApiUrl : envApiUrl)
     : "http://localhost:5000";
 
-const baseUrl = !envApiUrl || envApiUrl === "/api"
+const baseUrl = envApiUrl === "/api"
     ? "/api" 
     : `${API_BASE_URL}/api`;
 
