@@ -6,10 +6,8 @@
  * the application lifecycle (before connecting to Mongo, etc.).
  */
 
-// Load .env only when running locally
-if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config();
-}
+// Always load .env file (works in both dev and production)
+require('dotenv').config();
 
 // ─── Required variables ──────────────────────────────────────────────────────
 const REQUIRED = [

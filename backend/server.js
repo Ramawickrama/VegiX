@@ -12,6 +12,7 @@ const { startForecastScheduler, startMarketPriceScheduler, runInitialForecast, r
 const responseMiddleware = require('./middleware/responseMiddleware');
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 
+
 // Allowed frontend origins (cover Vite defaults + project-specific port)
 const ALLOWED_ORIGINS = [
   config.FRONTEND_URL,
@@ -25,7 +26,7 @@ const ALLOWED_ORIGINS = [
 
 const corsOptions = {
   origin: (origin, callback) => {
-    // Allow requests with no origin (curl, Postman, mobile apps)
+    // Allow requests with no origin (curl, Postman, same-origin Nginx proxy)
     if (!origin || ALLOWED_ORIGINS.includes(origin)) {
       callback(null, true);
     } else {
