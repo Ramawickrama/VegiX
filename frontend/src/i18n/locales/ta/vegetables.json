@@ -1,0 +1,20 @@
+{
+  "vegetables": {
+    "Tomato": "தக்காளி",
+    "Potato": "உருளைக்கிழங்கு",
+    "Beans": "பீன்ஸ்",
+    "Cucumber": "வெள்ளரி",
+    "Bell Pepper": "மிளகு பப்பரிகா",
+    "Carrot": "கேரட்",
+    "Cabbage": "முட்டைக்கோஸ்",
+    "Brinjal": "கத்தரி",
+    "Pumpkin": "பூசணி",
+    "Onion": "வெங்காயம்"
+  },
+  "categories": {
+    "Fruit": "பழம்",
+    "Root": "வேர்",
+    "Leafy": "இலை",
+    "Other": "மற்றவை"
+  }
+}

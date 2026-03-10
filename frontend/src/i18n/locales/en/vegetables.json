@@ -1,0 +1,20 @@
+{
+  "vegetables": {
+    "Tomato": "Tomato",
+    "Potato": "Potato",
+    "Beans": "Beans",
+    "Cucumber": "Cucumber",
+    "Bell Pepper": "Bell Pepper",
+    "Carrot": "Carrot",
+    "Cabbage": "Cabbage",
+    "Brinjal": "Brinjal",
+    "Pumpkin": "Pumpkin",
+    "Onion": "Onion"
+  },
+  "categories": {
+    "Fruit": "Fruit",
+    "Root": "Root",
+    "Leafy": "Leafy",
+    "Other": "Other"
+  }
+}

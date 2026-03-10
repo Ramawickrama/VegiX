@@ -1,0 +1,20 @@
+{
+  "vegetables": {
+    "Tomato": "තක්කාලිය",
+    "Potato": "අල",
+    "Beans": "බෙල්ලන්",
+    "Cucumber": "කුම්බර්",
+    "Bell Pepper": "මිල්පෙපර්",
+    "Carrot": "කැරට්",
+    "Cabbage": "කබේජ්",
+    "Brinjal": "බැටක්",
+    "Pumpkin": "පමන්",
+    "Onion": "ළූණු"
+  },
+  "categories": {
+    "Fruit": "පළතුරු",
+    "Root": "මුල්",
+    "Leafy": "පත්‍ර",
+    "Other": "වෙනත්"
+  }
+}

@@ -1,0 +1,70 @@
+.chart-card {
+  background: white;
+  border-left: 4px solid #2ecc71;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.chart-card:hover {
+  box-shadow: 0 4px 16px rgba(46, 204, 113, 0.3);
+  transform: translateY(-4px);
+}
+
+.chart-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.chart-card-title {
+  margin: 0;
+  color: #555;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.chart-card-icon {
+  font-size: 1.5rem;
+}
+
+.chart-card-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #2ecc71;
+  margin-bottom: 10px;
+}
+
+.chart-card-change {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.chart-card-change.positive {
+  color: #27ae60;
+}
+
+.chart-card-change.negative {
+  color: #e74c3c;
+}
+
+.change-icon {
+  font-size: 0.8rem;
+}
+
+@media (max-width: 768px) {
+  .chart-card {
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+
+  .chart-card-value {
+    font-size: 1.5rem;
+  }
+}

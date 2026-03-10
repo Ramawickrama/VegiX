@@ -1,0 +1,165 @@
+.page-layout {
+  padding: 30px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-layout-header {
+  margin-bottom: 30px;
+}
+
+.page-breadcrumbs {
+  display: flex;
+  alignItems: center;
+  gap: 8px;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.breadcrumb-link {
+  color: #3498db;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.breadcrumb-link:hover {
+  color: #2980b9;
+  text-decoration: underline;
+}
+
+.breadcrumb-separator {
+  color: #999;
+}
+
+.breadcrumb-current {
+  color: #666;
+  font-weight: 500;
+}
+
+.page-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.page-title-section {
+  flex: 1;
+  min-width: 200px;
+}
+
+.page-title {
+  margin: 0 0 8px 0;
+  color: #2c3e50;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.page-subtitle {
+  margin: 0;
+  color: #7f8c8d;
+  font-size: 1rem;
+}
+
+.page-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.page-layout-content {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  min-height: 400px;
+}
+
+.page-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #888;
+}
+
+.page-loading .loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #27ae60;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+.page-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.error-icon {
+  font-size: 48px;
+  margin-bottom: 15px;
+}
+
+.page-error h3 {
+  margin: 0 0 10px 0;
+  color: #c0392b;
+}
+
+.page-error p {
+  margin: 0 0 20px 0;
+  color: #7f8c8d;
+}
+
+.btn-retry {
+  padding: 12px 24px;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-retry:hover {
+  background: #2980b9;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  .page-layout {
+    padding: 15px;
+  }
+
+  .page-title {
+    font-size: 1.4rem;
+  }
+
+  .page-title-row {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .page-actions {
+    width: 100%;
+  }
+
+  .page-layout-content {
+    padding: 15px;
+  }
+}

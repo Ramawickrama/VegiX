@@ -1,0 +1,615 @@
+{
+  "info": {
+    "_postman_id": "vegix-order-publishing-updated",
+    "name": "VegiX Order Publishing API (Updated v2.0)",
+    "description": "Complete API collection with Vegetable Details, Commission Calculation, and Notifications",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1️⃣ AUTHENTICATION",
+      "item": [
+        {
+          "name": "Farmer Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Farmer\",\n  \"email\": \"farmer@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"farmer\",\n  \"phone\": \"0771234567\",\n  \"location\": \"Colombo\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Farmer Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"farmer@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Broker Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jane Broker\",\n  \"email\": \"broker@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"broker\",\n  \"phone\": \"0772345678\",\n  \"location\": \"Colombo\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Broker Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"broker@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Buyer Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Bob Buyer\",\n  \"email\": \"buyer@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"buyer\",\n  \"phone\": \"0773456789\",\n  \"location\": \"Kandy\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Buyer Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"buyer@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "login"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2️⃣ VEGETABLES",
+      "item": [
+        {
+          "name": "Get All Vegetables",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/vegetables",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "vegetables"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3️⃣ FARMER ORDERS",
+      "item": [
+        {
+          "name": "Publish Farmer Selling Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{FARMER_TOKEN}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vegetableId\": \"{{VEGETABLE_ID}}\",\n  \"quantity\": 100,\n  \"unit\": \"kg\",\n  \"pricePerUnit\": 150,\n  \"location\": \"Colombo\",\n  \"quality\": \"premium\",\n  \"description\": \"Fresh organic tomatoes from my farm\",\n  \"deliveryDate\": \"2026-02-28\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/farmer/publish-order",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "farmer", "publish-order"]
+            }
+          }
+        },
+        {
+          "name": "Get Farmer Orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{FARMER_TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/farmer/get-orders",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "farmer", "get-orders"]
+            }
+          }
+        },
+        {
+          "name": "View Broker Orders (Farmer)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{FARMER_TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/farmer/view-broker-orders",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "farmer", "view-broker-orders"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4️⃣ BROKER ORDERS",
+      "item": [
+        {
+          "name": "Publish Broker BUYING Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{BROKER_TOKEN}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vegetableId\": \"{{VEGETABLE_ID}}\",\n  \"quantity\": 200,\n  \"unit\": \"kg\",\n  \"pricePerUnit\": 140,\n  \"location\": \"Colombo Market\",\n  \"quality\": \"standard\",\n  \"description\": \"Buying from farmers for market supply\",\n  \"deliveryDate\": \"2026-02-25\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/broker/publish-buy-order",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "broker", "publish-buy-order"]
+            }
+          }
+        },
+        {
+          "name": "Publish Broker SELLING Order (WITH 10% COMMISSION)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{BROKER_TOKEN}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vegetableId\": \"{{VEGETABLE_ID}}\",\n  \"quantity\": 150,\n  \"unit\": \"kg\",\n  \"location\": \"Colombo\",\n  \"quality\": \"premium\",\n  \"description\": \"Fresh tomatoes available for bulk orders\",\n  \"deliveryDate\": \"2026-02-26\"\n}\n\nNOTE: Commission is auto-calculated as 10% of base vegetable price!\nFor 150 kg at Rs. 150 base:\n- Base Total: Rs. 22,500\n- Commission (10%): Rs. 2,250\n- Final Price to Buyer: Rs. 24,750"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/broker/publish-sell-order",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "broker", "publish-sell-order"]
+            }
+          }
+        },
+        {
+          "name": "Get Broker Orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{BROKER_TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/broker/get-orders",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "broker", "get-orders"]
+            }
+          }
+        },
+        {
+          "name": "View Farmer Orders (Broker)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{BROKER_TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/broker/view-farmer-orders",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "broker", "view-farmer-orders"]
+            }
+          }
+        },
+        {
+          "name": "View Buyer Orders (Broker)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{BROKER_TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/broker/view-buyer-orders",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "broker", "view-buyer-orders"]
+            }
+          }
+        },
+        {
+          "name": "Show Interest in Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{BROKER_TOKEN}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": \"{{ORDER_ID}}\",\n  \"orderType\": \"farmer\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/broker/show-interest",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "broker", "show-interest"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5️⃣ BUYER ORDERS",
+      "item": [
+        {
+          "name": "Publish Buyer Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{BUYER_TOKEN}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vegetableId\": \"{{VEGETABLE_ID}}\",\n  \"quantity\": 50,\n  \"unit\": \"kg\",\n  \"budgetPerUnit\": 160,\n  \"location\": \"Hotel XYZ, Colombo\",\n  \"quality\": \"premium\",\n  \"description\": \"Need fresh tomatoes for daily restaurant orders\",\n  \"deliveryDate\": \"2026-02-25\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/buyer/publish-order",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "buyer", "publish-order"]
+            }
+          }
+        },
+        {
+          "name": "Get Buyer Orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{BUYER_TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/buyer/get-orders",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "buyer", "get-orders"]
+            }
+          }
+        },
+        {
+          "name": "View Broker Selling Orders (Buyer)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{BUYER_TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/buyer/view-broker-selling-orders",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "buyer", "view-broker-selling-orders"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6️⃣ NOTIFICATIONS",
+      "item": [
+        {
+          "name": "Get User Notifications",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{USER_TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/notifications?limit=10&skip=0",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "notifications"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "skip",
+                  "value": "0"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Mark Notification as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{USER_TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/notifications/{{NOTIFICATION_ID}}/read",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "notifications", "{{NOTIFICATION_ID}}", "read"]
+            }
+          }
+        },
+        {
+          "name": "Mark All Notifications as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{USER_TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/notifications/read-all",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "notifications", "read-all"]
+            }
+          }
+        },
+        {
+          "name": "Delete Notification",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{USER_TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/notifications/{{NOTIFICATION_ID}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "notifications", "{{NOTIFICATION_ID}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7️⃣ HEALTH CHECK",
+      "item": [
+        {
+          "name": "Server Ping",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/ping",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "ping"]
+            }
+          }
+        },
+        {
+          "name": "Server Root",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "FARMER_TOKEN",
+      "value": "paste_farmer_jwt_token_here",
+      "type": "string"
+    },
+    {
+      "key": "BROKER_TOKEN",
+      "value": "paste_broker_jwt_token_here",
+      "type": "string"
+    },
+    {
+      "key": "BUYER_TOKEN",
+      "value": "paste_buyer_jwt_token_here",
+      "type": "string"
+    },
+    {
+      "key": "USER_TOKEN",
+      "value": "paste_user_jwt_token_here",
+      "type": "string"
+    },
+    {
+      "key": "VEGETABLE_ID",
+      "value": "paste_vegetable_id_from_database",
+      "type": "string"
+    },
+    {
+      "key": "ORDER_ID",
+      "value": "paste_order_id_from_response",
+      "type": "string"
+    },
+    {
+      "key": "NOTIFICATION_ID",
+      "value": "paste_notification_id",
+      "type": "string"
+    }
+  ]
+}

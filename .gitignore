@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Environment variables (NEVER commit secrets!)
+.env
+.env.local
+.env.development
+.env.production
+.env.staging
+backend/.env
+frontend/.env
+!.env.example
+!backend/.env.example
+!frontend/.env.example
+
+# Build output
+frontend/dist/
+frontend/build/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Uploads (local dev only, production uses cloud storage)
+backend/uploads/
+
+# Coverage
+coverage/
