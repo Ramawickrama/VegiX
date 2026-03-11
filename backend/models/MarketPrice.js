@@ -65,15 +65,10 @@ const marketPriceSchema = new mongoose.Schema({
   }],
 }, { timestamps: true });
 
-// INDEX STRATEGY: Latest price per vegetable
-// Using a partial filter expression to safely ignore nulls if any sneak in 
-// (though 'required: true' above prevents new ones).
+// INDEX STRATEGY: Latest price per vegetable (strict unique index)
 marketPriceSchema.index(
   { vegetableId: 1 }, 
-  { 
-    unique: true, 
-    partialFilterExpression: { vegetableId: { $exists: true, $ne: null } } 
-  }
+  { unique: true }
 );
 
 // Performance indexes for queries

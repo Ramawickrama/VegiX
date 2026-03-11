@@ -76,10 +76,17 @@ const fetchMarketPrices = async () => {
 
     for (const veg of vegetables) {
       try {
-        // 1. VALIDATION: Ensure vegetableId exists
+        // 1. VALIDATION: Ensure vegetableId exists and is valid
         const vegId = veg.vegetableId || veg.vegCode;
-        if (!vegId) {
-          console.warn(`[MarketPrice] Skipping ${veg.name}: No unique identifier (vegCode/vegetableId) found.`);
+        if (!vegId || typeof vegId !== 'string') {
+          console.warn(`[MarketPrice] Skipping ${veg.name}: No valid unique identifier (vegCode/vegetableId) found.`);
+          continue;
+        }
+
+        // Check for duplicate vegetableId in database before upsert
+        const existing = await MarketPrice.findOne({ vegetableId: vegId });
+        if (existing && existing.vegetable && !existing.vegetable.equals(veg._id)) {
+          console.warn(`[MarketPrice] Skipping ${veg.name}: vegetableId ${vegId} already used by another vegetable.`);
           continue;
         }
 
