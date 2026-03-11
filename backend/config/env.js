@@ -1,27 +1,31 @@
 /**
  * Centralised environment variable loader & validator.
- *
- * Loads dotenv only in development and validates that every
- * required variable is present.  Import this file early in
- * the application lifecycle (before connecting to Mongo, etc.).
+ * 
+ * In development, loads from .env. In production (like Render), 
+ * it uses system environment variables.
  */
 
-// Always load .env file (works in both dev and production)
-require('dotenv').config();
+// Load dotenv only in non-production environments
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
+
+// Support both MONGO_URI and MONGODB_URI (standard for MongoDB Atlas on Render/Heroku)
+const MONGO_URI = process.env.MONGO_URI || process.env.MONGODB_URI;
 
 // ─── Required variables ──────────────────────────────────────────────────────
 const REQUIRED = [
-    'MONGO_URI',
-    'JWT_SECRET',
+    { key: 'MONGO_URI', actual: MONGO_URI },
+    { key: 'JWT_SECRET', actual: process.env.JWT_SECRET },
 ];
 
-const missing = REQUIRED.filter((key) => !process.env[key]);
+const missing = REQUIRED.filter((item) => !item.actual);
 
 if (missing.length > 0) {
     console.error(
-        `\n❌ Missing required environment variables:\n` +
-        missing.map((k) => `   • ${k}`).join('\n') +
-        `\n\nCreate a .env file in the backend/ directory using .env.example as a template.\n`
+        `\n❌ FATAL ERROR: Missing required environment variables:\n` +
+        missing.map((item) => `   • ${item.key}`).join('\n') +
+        `\n\nPlease set these in your environment or .env file.\n`
     );
     process.exit(1);
 }
@@ -30,9 +34,9 @@ if (missing.length > 0) {
 module.exports = {
     PORT: parseInt(process.env.PORT, 10) || 5000,
     NODE_ENV: process.env.NODE_ENV || 'development',
-    MONGO_URI: process.env.MONGO_URI,
+    MONGO_URI: MONGO_URI,
     JWT_SECRET: process.env.JWT_SECRET,
-    FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:3000',
+    FRONTEND_URL: process.env.FRONTEND_URL || process.env.CLIENT_URL || 'http://localhost:3000',
 
     // Email (optional)
     EMAIL_SERVICE: process.env.EMAIL_SERVICE || 'gmail',

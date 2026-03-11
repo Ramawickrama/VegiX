@@ -3,13 +3,14 @@ node_modules/
 */node_modules/
 
 # Environment variables (NEVER commit secrets!)
+
 .env
 .env.local
 .env.development
 .env.production
 .env.staging
-backend/.env
-frontend/.env
+
+
 !.env.example
 !backend/.env.example
 !frontend/.env.example

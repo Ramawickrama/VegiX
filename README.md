@@ -167,14 +167,15 @@ VegiX/
 #### Backend (`backend/.env`)
 | Variable | Required | Description |
 |---|---|---|
-| `MONGO_URI` | ✅ | MongoDB connection string |
+| `MONGO_URI` | ✅ | MongoDB connection string (or `MONGODB_URI`) |
 | `JWT_SECRET` | ✅ | Secret key for JWT token signing |
-| `PORT` | ❌ | Server port (default: 5000) |
-| `NODE_ENV` | ❌ | Environment (default: development) |
-| `FRONTEND_URL` | ❌ | Frontend origin for CORS (default: http://localhost:3000) |
+| `FRONTEND_URL` | ❌ | Primary frontend origin (or `CLIENT_URL`) |
+| `PORT` | ❌ | Server port (set by Render in production) |
+| `NODE_ENV` | ❌ | `production` or `development` |
 | `EMAIL_SERVICE` | ❌ | Email provider (default: gmail) |
 | `EMAIL_USER` | ❌ | Email sender address |
 | `EMAIL_PASSWORD` | ❌ | Email app password |
+
 
 #### Frontend (`frontend/.env`)
 | Variable | Required | Description |
