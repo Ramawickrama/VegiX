@@ -9,11 +9,11 @@ const createAdmin = require('./utils/createAdmin');
 const seedVegetables = require('./seeds/seedVegetables');
 const socketManager = require('./services/socketManager');
 const { setSocketIO } = require('./services/notificationService');
-const { 
-  startForecastScheduler, 
-  startMarketPriceScheduler, 
-  runInitialForecast, 
-  runInitialMarketPrices 
+const {
+  startForecastScheduler,
+  startMarketPriceScheduler,
+  runInitialForecast,
+  runInitialMarketPrices
 } = require('./services/schedulerService');
 const responseMiddleware = require('./middleware/responseMiddleware');
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
@@ -34,7 +34,7 @@ if (config.NODE_ENV !== 'production') {
     'http://127.0.0.1:3001',
     'http://127.0.0.1:5173',
     'http://13.60.95.84:3001', // Assuming these are dev/test IPs
-    'http://13.60.95.84',
+    'http://13.60.87.168',
   ];
   devOrigins.forEach(origin => {
     if (!ALLOWED_ORIGINS.includes(origin)) ALLOWED_ORIGINS.push(origin);
@@ -64,12 +64,12 @@ app.options('*', cors(corsOptions));
 const io = socketio(server, {
   cors: {
     origin: (origin, callback) => {
-        // Match Express CORS logic
-        if (!origin || ALLOWED_ORIGINS.includes(origin)) {
-          callback(null, true);
-        } else {
-          callback(new Error('Not allowed by CORS'));
-        }
+      // Match Express CORS logic
+      if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
     },
     methods: ['GET', 'POST'],
     credentials: true,
@@ -190,12 +190,12 @@ mongoose.connect(config.MONGO_URI, {
 })
   .then(async () => {
     console.log('✓ MongoDB connected successfully');
-    
+
     // Background Services & Initializers (wrapped to prevent crash)
     try {
       await createAdmin();
       await seedVegetables();
-      
+
       // Schedulers (wrapped individually to ensure partial success)
       const safeRun = async (taskName, taskFn) => {
         try {
