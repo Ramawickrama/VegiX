@@ -62,54 +62,62 @@ const generateRealisticPrice = (basePrice) => {
   };
 };
 
+/**
+ * Fetches and updates market prices.
+ * Uses atomic upsert to prevent duplicates and ensure latest data is stored.
+ */
 const fetchMarketPrices = async () => {
-  console.log('[MarketPrice] Starting market price fetch...');
+  console.log('[MarketPrice] Starting market price collection...');
 
   try {
-    const vegetables = await Vegetable.find({ isActive: true }).limit(20);
+    const vegetables = await Vegetable.find({ isActive: true }).limit(50);
     const results = [];
     const now = new Date();
 
     for (const veg of vegetables) {
-      // 1. Ensure vegetableId is present
-      if (!veg.vegetableId) {
-        console.error(`[MarketPrice] Skipping ${veg.name}: Missing vegetableId`);
-        continue;
-      }
-
-      const basePrices = BASE_PRICES[veg.name] || { min: 100, max: 200, avg: 150 };
-      const marketIndex = Math.floor(Math.random() * SRI_LANKAN_MARKETS.length);
-      const market = SRI_LANKAN_MARKETS[marketIndex];
-
-      const prices = generateRealisticPrice(basePrices.avg);
-
       try {
-        // 2. Use findOneAndUpdate with upsert to prevent duplicates
-        const updatedPrice = await MarketPrice.findOneAndUpdate(
-          { vegetableId: veg.vegetableId }, // Match by the unique vegetableId
-          {
-            $set: {
-              vegetable: veg._id,
-              vegetableName: veg.name,
-              pricePerKg: prices.avg,
-              minPrice: prices.min,
-              maxPrice: prices.max,
-              previousPrice: basePrices.avg,
-              priceChange: prices.avg - basePrices.avg,
-              priceChangePercentage: ((prices.avg - basePrices.avg) / basePrices.avg * 100).toFixed(2),
-              location: market.name,
-              unit: 'kg',
-              date: now,
-              updatedBy: 'system'
-            },
-            // 3. Keep track of history by pushing to the array
-            $push: { 
-              historicalData: { 
-                $each: [{ price: prices.avg, date: now }],
-                $slice: -30 // Keep last 30 entries to prevent document bloating
-              } 
-            }
+        // 1. VALIDATION: Ensure vegetableId exists
+        const vegId = veg.vegetableId || veg.vegCode;
+        if (!vegId) {
+          console.warn(`[MarketPrice] Skipping ${veg.name}: No unique identifier (vegCode/vegetableId) found.`);
+          continue;
+        }
+
+        const basePrices = BASE_PRICES[veg.name] || { min: 100, max: 200, avg: 150 };
+        const marketIndex = Math.floor(Math.random() * SRI_LANKAN_MARKETS.length);
+        const market = SRI_LANKAN_MARKETS[marketIndex];
+
+        const prices = generateRealisticPrice(basePrices.avg);
+
+        // 2. UPSERT STRATEGY: Update the latest record for this vegetable
+        const updateData = {
+          $set: {
+            vegetable: veg._id,
+            vegetableId: vegId,
+            vegetableName: veg.name,
+            pricePerKg: prices.avg,
+            minPrice: prices.min,
+            maxPrice: prices.max,
+            previousPrice: basePrices.avg,
+            priceChange: prices.avg - basePrices.avg,
+            priceChangePercentage: ((prices.avg - basePrices.avg) / basePrices.avg * 100).toFixed(2),
+            location: market.name,
+            unit: veg.defaultUnit || 'kg',
+            date: now,
+            updatedBy: 'system'
           },
+          // 3. Keep a window of historical data in the same document for performance
+          $push: {
+            historicalData: {
+              $each: [{ price: prices.avg, date: now }],
+              $slice: -30 // Keep last 30 snapshots
+            }
+          }
+        };
+
+        const result = await MarketPrice.findOneAndUpdate(
+          { vegetableId: vegId }, // Unique key
+          updateData,
           { 
             upsert: true, 
             new: true, 
@@ -118,22 +126,22 @@ const fetchMarketPrices = async () => {
           }
         );
 
-        results.push(updatedPrice);
-      } catch (error) {
-        // 4. Handle MongoDB duplicate key error (E11000)
-        if (error.code === 11000) {
-          console.error(`[MarketPrice] Duplicate key error for ${veg.name} (ID: ${veg.vegetableId}). Skipping.`);
+        results.push(result);
+      } catch (err) {
+        // 4. PER-RECORD ERROR HANDLING: Don't crash the whole loop
+        if (err.code === 11000) {
+          console.error(`[MarketPrice] Duplicate key error for ${veg.name}: ${err.message}`);
         } else {
-          console.error(`[MarketPrice] Failed to update price for ${veg.name}:`, error.message);
+          console.error(`[MarketPrice] Failed to process ${veg.name}:`, err.message);
         }
       }
     }
 
-
-    console.log(`[MarketPrice] Successfully fetched and saved ${results.length} prices`);
+    console.log(`[MarketPrice] Successfully processed ${results.length} market prices.`);
     return results;
   } catch (error) {
-    console.error('[MarketPrice] Error fetching market prices:', error.message);
+    console.error('[MarketPrice] Fatal error in collection job:', error.message);
+    // In a scheduler, we log but don't strictly re-throw if we want common logic to continue
     throw error;
   }
 };
@@ -143,43 +151,31 @@ const getLatestPrices = async (options = {}) => {
 
   try {
     const filter = {};
-
     if (vegetable) {
       filter.vegetableName = { $regex: vegetable, $options: 'i' };
     }
-
     if (market) {
       filter.location = { $regex: market, $options: 'i' };
     }
 
     const skip = (page - 1) * limit;
 
-    const prices = await MarketPrice.aggregate([
-      { $match: filter },
-      { $sort: { createdAt: -1 } },
-      {
-        $group: {
-          _id: { vegetable: '$vegetableName', market: '$location' },
-          latestPrice: { $first: '$$ROOT' }
-        }
-      },
-      { $sort: { 'latestPrice.createdAt': -1 } },
-      { $skip: skip },
-      { $limit: limit }
-    ]);
+    const prices = await MarketPrice.find(filter)
+      .sort({ updatedAt: -1 })
+      .skip(skip)
+      .limit(limit);
 
     const total = await MarketPrice.countDocuments(filter);
 
     return {
       success: true,
-      data: prices.map(p => p.latestPrice),
+      data: prices,
       pagination: {
         page,
         limit,
         total,
         pages: Math.ceil(total / limit)
-      },
-      lastUpdated: prices[0]?.latestPrice?.createdAt || null
+      }
     };
   } catch (error) {
     console.error('[MarketPrice] Error getting latest prices:', error);
@@ -187,19 +183,17 @@ const getLatestPrices = async (options = {}) => {
   }
 };
 
-const getPriceHistory = async (vegetableName, days = 7) => {
+const getPriceHistory = async (vegetableId, days = 7) => {
   try {
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - days);
-
-    const history = await MarketPrice.find({
-      vegetableName,
-      createdAt: { $gte: startDate }
-    }).sort({ createdAt: 1 });
+    const priceDoc = await MarketPrice.findOne({ vegetableId });
+    
+    if (!priceDoc) {
+      return { success: false, message: 'Vegetable not found' };
+    }
 
     return {
       success: true,
-      data: history
+      data: priceDoc.historicalData
     };
   } catch (error) {
     console.error('[MarketPrice] Error getting price history:', error);

@@ -6,6 +6,7 @@ const marketPriceSchema = new mongoose.Schema({
     ref: 'Vegetable',
     required: true,
   },
+  // Ensure we store the string ID for unique indexing and easier cross-referencing
   vegetableId: {
     type: String,
     required: true,
@@ -64,10 +65,18 @@ const marketPriceSchema = new mongoose.Schema({
   }],
 }, { timestamps: true });
 
-// Create a unique index for vegetableId to prevent duplicates for the same vegetable.
-// Using sparse: true allows to handle cases where there might be old documents without this field.
-marketPriceSchema.index({ vegetableId: 1 }, { unique: true, sparse: true });
+// INDEX STRATEGY: Latest price per vegetable
+// Using a partial filter expression to safely ignore nulls if any sneak in 
+// (though 'required: true' above prevents new ones).
+marketPriceSchema.index(
+  { vegetableId: 1 }, 
+  { 
+    unique: true, 
+    partialFilterExpression: { vegetableId: { $exists: true, $ne: null } } 
+  }
+);
 
+// Performance indexes for queries
 marketPriceSchema.index({ vegetable: 1, createdAt: -1 });
 marketPriceSchema.index({ vegetable: 1, date: -1 });
 marketPriceSchema.index({ createdAt: -1 });
