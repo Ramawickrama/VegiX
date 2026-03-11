@@ -6,6 +6,10 @@ const marketPriceSchema = new mongoose.Schema({
     ref: 'Vegetable',
     required: true,
   },
+  vegetableId: {
+    type: String,
+    required: true,
+  },
   vegetableName: {
     type: String,
     required: true,
@@ -59,6 +63,10 @@ const marketPriceSchema = new mongoose.Schema({
     },
   }],
 }, { timestamps: true });
+
+// Create a unique index for vegetableId to prevent duplicates for the same vegetable.
+// Using sparse: true allows to handle cases where there might be old documents without this field.
+marketPriceSchema.index({ vegetableId: 1 }, { unique: true, sparse: true });
 
 marketPriceSchema.index({ vegetable: 1, createdAt: -1 });
 marketPriceSchema.index({ vegetable: 1, date: -1 });

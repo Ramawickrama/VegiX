@@ -71,30 +71,64 @@ const fetchMarketPrices = async () => {
     const now = new Date();
 
     for (const veg of vegetables) {
+      // 1. Ensure vegetableId is present
+      if (!veg.vegetableId) {
+        console.error(`[MarketPrice] Skipping ${veg.name}: Missing vegetableId`);
+        continue;
+      }
+
       const basePrices = BASE_PRICES[veg.name] || { min: 100, max: 200, avg: 150 };
       const marketIndex = Math.floor(Math.random() * SRI_LANKAN_MARKETS.length);
       const market = SRI_LANKAN_MARKETS[marketIndex];
 
       const prices = generateRealisticPrice(basePrices.avg);
 
-      const priceDoc = new MarketPrice({
-        vegetable: veg._id,
-        vegetableName: veg.name,
-        pricePerKg: prices.avg,
-        minPrice: prices.min,
-        maxPrice: prices.max,
-        previousPrice: basePrices.avg,
-        priceChange: prices.avg - basePrices.avg,
-        priceChangePercentage: ((prices.avg - basePrices.avg) / basePrices.avg * 100).toFixed(2),
-        location: market.name,
-        unit: 'kg',
-        date: now,
-        updatedBy: 'system'
-      });
+      try {
+        // 2. Use findOneAndUpdate with upsert to prevent duplicates
+        const updatedPrice = await MarketPrice.findOneAndUpdate(
+          { vegetableId: veg.vegetableId }, // Match by the unique vegetableId
+          {
+            $set: {
+              vegetable: veg._id,
+              vegetableName: veg.name,
+              pricePerKg: prices.avg,
+              minPrice: prices.min,
+              maxPrice: prices.max,
+              previousPrice: basePrices.avg,
+              priceChange: prices.avg - basePrices.avg,
+              priceChangePercentage: ((prices.avg - basePrices.avg) / basePrices.avg * 100).toFixed(2),
+              location: market.name,
+              unit: 'kg',
+              date: now,
+              updatedBy: 'system'
+            },
+            // 3. Keep track of history by pushing to the array
+            $push: { 
+              historicalData: { 
+                $each: [{ price: prices.avg, date: now }],
+                $slice: -30 // Keep last 30 entries to prevent document bloating
+              } 
+            }
+          },
+          { 
+            upsert: true, 
+            new: true, 
+            runValidators: true,
+            setDefaultsOnInsert: true 
+          }
+        );
 
-      const saved = await priceDoc.save();
-      results.push(saved);
+        results.push(updatedPrice);
+      } catch (error) {
+        // 4. Handle MongoDB duplicate key error (E11000)
+        if (error.code === 11000) {
+          console.error(`[MarketPrice] Duplicate key error for ${veg.name} (ID: ${veg.vegetableId}). Skipping.`);
+        } else {
+          console.error(`[MarketPrice] Failed to update price for ${veg.name}:`, error.message);
+        }
+      }
     }
+
 
     console.log(`[MarketPrice] Successfully fetched and saved ${results.length} prices`);
     return results;
