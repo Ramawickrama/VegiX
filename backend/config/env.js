@@ -5,10 +5,8 @@
  * it uses system environment variables.
  */
 
-// Load dotenv only in non-production environments
-if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config();
-}
+// Always load dotenv - it won't override existing env vars
+require('dotenv').config();
 
 // Support both MONGO_URI and MONGODB_URI (standard for MongoDB Atlas on Render/Heroku)
 const MONGO_URI = process.env.MONGO_URI || process.env.MONGODB_URI;
