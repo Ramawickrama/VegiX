@@ -112,14 +112,14 @@ app.get('/', (req, res) => {
 });
 
 // Mounted API routes
-app.use(process.env.VITE_API_URL + '/api/auth', require('./routes/authRoutes'));
-app.use(process.env.VITE_API_URL + '/api/admin', require('./routes/adminRoutes'));
-app.use(process.env.VITE_API_URL + '/api/farmer', require('./routes/farmerRoutes'));
-app.use(process.env.VITE_API_URL + '/api/broker', require('./routes/brokerRoutes'));
-app.use(process.env.VITE_API_URL + '/api/buyer', require('./routes/buyerRoutes'));
-app.use(process.env.VITE_API_URL + '/api/buyer-orders', require('./routes/buyerOrderRoutes'));
-app.use(process.env.VITE_API_URL + '/api/feedback', require('./routes/feedbackRoutes'));
-app.use(process.env.VITE_API_URL + '/api/notifications', require('./routes/notificationRoutes'));
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/admin', require('./routes/adminRoutes'));
+app.use('/api/farmer', require('./routes/farmerRoutes'));
+app.use('/api/broker', require('./routes/brokerRoutes'));
+app.use('/api/buyer', require('./routes/buyerRoutes'));
+app.use('/api/buyer-orders', require('./routes/buyerOrderRoutes'));
+app.use('/api/feedback', require('./routes/feedbackRoutes'));
+app.use('/api/notifications', require('./routes/notificationRoutes'));
 app.use('/api/market-prices', require('./routes/marketPriceRoutes'));
 app.use('/api/live-market', require('./routes/liveMarketRoutes'));
 app.use('/api/vegetables', require('./routes/vegetableRoutes'));
