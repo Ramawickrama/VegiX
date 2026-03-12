@@ -35,7 +35,16 @@ const Login = ({ onLoginSuccess }) => {
       toast.success(t('auth.loginSuccess'));
       navigate(`/${response.data.user.role}`);
     } catch (err) {
-      toast.error(err.response?.data?.message || t('auth.loginFailed'));
+      const errorMessage = err.response?.data?.message;
+      if (err.code === 'ERR_NETWORK' || err.message === 'Network Error') {
+        toast.error('Cannot connect to server. Please check your connection.');
+      } else if (err.response?.status === 401) {
+        toast.error(errorMessage || 'Invalid email or password');
+      } else if (err.response?.status === 503) {
+        toast.error('Server is temporarily unavailable. Please try again.');
+      } else {
+        toast.error(errorMessage || t('auth.loginFailed'));
+      }
     } finally {
       setLoading(false);
     }
