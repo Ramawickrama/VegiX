@@ -33,8 +33,7 @@ if (config.NODE_ENV !== 'production') {
     'http://127.0.0.1:3000',
     'http://127.0.0.1:3001',
     'http://127.0.0.1:5173',
-    'http://13.60.95.84:3001', // Assuming these are dev/test IPs
-    'http://13.60.87.168',
+
   ];
   devOrigins.forEach(origin => {
     if (!ALLOWED_ORIGINS.includes(origin)) ALLOWED_ORIGINS.push(origin);

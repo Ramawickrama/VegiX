@@ -23,7 +23,7 @@
               "raw": "{\n  \"name\": \"John Farmer\",\n  \"email\": \"farmer@vegix.com\",\n  \"phone\": \"0712345678\",\n  \"password\": \"password123\",\n  \"role\": \"farmer\",\n  \"location\": \"Colombo\",\n  \"company\": \"John's Farm\"\n}"
             },
             "url": {
-              "raw": "http://localhost:5000/api/auth/register",
+              "raw": "http://13.48.136.109:5000/api/auth/register",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -52,7 +52,7 @@
               "raw": "{\n  \"name\": \"Jane Broker\",\n  \"email\": \"broker@vegix.com\",\n  \"phone\": \"0787654321\",\n  \"password\": \"password123\",\n  \"role\": \"broker\",\n  \"location\": \"Colombo Market\",\n  \"company\": \"Jane's Trading\"\n}"
             },
             "url": {
-              "raw": "http://localhost:5000/api/auth/register",
+              "raw": "http://13.48.136.109:5000/api/auth/register",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -81,7 +81,7 @@
               "raw": "{\n  \"name\": \"Bob Buyer\",\n  \"email\": \"buyer@vegix.com\",\n  \"phone\": \"0712999888\",\n  \"password\": \"password123\",\n  \"role\": \"buyer\",\n  \"location\": \"Colombo\",\n  \"company\": \"Restaurant XYZ\"\n}"
             },
             "url": {
-              "raw": "http://localhost:5000/api/auth/register",
+              "raw": "http://13.48.136.109:5000/api/auth/register",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -110,7 +110,7 @@
               "raw": "{\n  \"email\": \"farmer@vegix.com\",\n  \"password\": \"password123\"\n}"
             },
             "url": {
-              "raw": "http://localhost:5000/api/auth/login",
+              "raw": "http://13.48.136.109:5000/api/auth/login",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -139,7 +139,7 @@
               "raw": "{\n  \"email\": \"broker@vegix.com\",\n  \"password\": \"password123\"\n}"
             },
             "url": {
-              "raw": "http://localhost:5000/api/auth/login",
+              "raw": "http://13.48.136.109:5000/api/auth/login",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -168,7 +168,7 @@
               "raw": "{\n  \"email\": \"buyer@vegix.com\",\n  \"password\": \"password123\"\n}"
             },
             "url": {
-              "raw": "http://localhost:5000/api/auth/login",
+              "raw": "http://13.48.136.109:5000/api/auth/login",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -206,7 +206,7 @@
               "raw": "{\n  \"vegetableId\": \"<VEGETABLE_ID>\",\n  \"quantity\": 100,\n  \"unit\": \"kg\",\n  \"pricePerUnit\": 150,\n  \"location\": \"Colombo\",\n  \"quality\": \"premium\",\n  \"description\": \"Fresh organic tomatoes from my farm\",\n  \"deliveryDate\": \"2026-02-28\"\n}"
             },
             "url": {
-              "raw": "http://localhost:5000/api/farmer/publish-order",
+              "raw": "http://13.48.136.109:5000/api/farmer/publish-order",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -231,7 +231,7 @@
               }
             ],
             "url": {
-              "raw": "http://localhost:5000/api/farmer/my-orders",
+              "raw": "http://13.48.136.109:5000/api/farmer/my-orders",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -256,7 +256,7 @@
               }
             ],
             "url": {
-              "raw": "http://localhost:5000/api/farmer/broker-orders",
+              "raw": "http://13.48.136.109:5000/api/farmer/broker-orders",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -294,7 +294,7 @@
               "raw": "{\n  \"vegetableId\": \"<VEGETABLE_ID>\",\n  \"quantity\": 200,\n  \"unit\": \"kg\",\n  \"pricePerUnit\": 140,\n  \"location\": \"Colombo Market\",\n  \"quality\": \"standard\",\n  \"description\": \"Buying from farmers for market supply\",\n  \"deliveryDate\": \"2026-02-25\"\n}"
             },
             "url": {
-              "raw": "http://localhost:5000/api/broker/publish-buy-order",
+              "raw": "http://13.48.136.109:5000/api/broker/publish-buy-order",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -327,7 +327,7 @@
               "raw": "{\n  \"vegetableId\": \"<VEGETABLE_ID>\",\n  \"quantity\": 150,\n  \"unit\": \"kg\",\n  \"pricePerUnit\": 180,\n  \"location\": \"Colombo\",\n  \"quality\": \"premium\",\n  \"description\": \"Fresh tomatoes available for bulk orders\",\n  \"deliveryDate\": \"2026-02-26\"\n}"
             },
             "url": {
-              "raw": "http://localhost:5000/api/broker/publish-sell-order",
+              "raw": "http://13.48.136.109:5000/api/broker/publish-sell-order",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -352,7 +352,7 @@
               }
             ],
             "url": {
-              "raw": "http://localhost:5000/api/broker/my-orders",
+              "raw": "http://13.48.136.109:5000/api/broker/my-orders",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -377,7 +377,7 @@
               }
             ],
             "url": {
-              "raw": "http://localhost:5000/api/broker/farmer-orders",
+              "raw": "http://13.48.136.109:5000/api/broker/farmer-orders",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -402,7 +402,7 @@
               }
             ],
             "url": {
-              "raw": "http://localhost:5000/api/broker/buyer-orders",
+              "raw": "http://13.48.136.109:5000/api/broker/buyer-orders",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -427,7 +427,7 @@
               }
             ],
             "url": {
-              "raw": "http://localhost:5000/api/broker/show-interest/<ORDER_ID>",
+              "raw": "http://13.48.136.109:5000/api/broker/show-interest/<ORDER_ID>",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -466,7 +466,7 @@
               "raw": "{\n  \"vegetableId\": \"<VEGETABLE_ID>\",\n  \"quantity\": 50,\n  \"unit\": \"kg\",\n  \"pricePerUnit\": 160,\n  \"location\": \"Hotel XYZ, Colombo\",\n  \"quality\": \"premium\",\n  \"description\": \"Need fresh tomatoes for daily restaurant orders\",\n  \"deliveryDate\": \"2026-02-25\"\n}"
             },
             "url": {
-              "raw": "http://localhost:5000/api/buyer/publish-order",
+              "raw": "http://13.48.136.109:5000/api/buyer/publish-order",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -491,7 +491,7 @@
               }
             ],
             "url": {
-              "raw": "http://localhost:5000/api/buyer/my-orders",
+              "raw": "http://13.48.136.109:5000/api/buyer/my-orders",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -516,7 +516,7 @@
               }
             ],
             "url": {
-              "raw": "http://localhost:5000/api/buyer/broker-orders",
+              "raw": "http://13.48.136.109:5000/api/buyer/broker-orders",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -540,7 +540,7 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "http://localhost:5000/api/ping",
+              "raw": "http://13.48.136.109:5000/api/ping",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -558,7 +558,7 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "http://localhost:5000",
+              "raw": "http://13.48.136.109:5000",
               "protocol": "http",
               "host": [
                 "localhost"
