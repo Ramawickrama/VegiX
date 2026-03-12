@@ -13,7 +13,7 @@ module.exports = {
         PORT: 5000,
         MONGO_URI: process.env.MONGO_URI,
         JWT_SECRET: process.env.JWT_SECRET,
-        FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:3000'
+        FRONTEND_URL: process.env.FRONTEND_URL || 'http://13.48.136.109:3000'
       },
       error_file: 'logs/backend-error.log',
       out_file: 'logs/backend-out.log',

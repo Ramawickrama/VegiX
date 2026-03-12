@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const VITE_API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+export const VITE_API_URL = import.meta.env.VITE_API_URL || "http://13.48.136.109:5000";
 
 export const API_BASE_URL = VITE_API_URL;
 
