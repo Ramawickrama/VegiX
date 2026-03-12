@@ -33,7 +33,8 @@ if (config.NODE_ENV !== 'production') {
     'http://127.0.0.1:3000',
     'http://127.0.0.1:3001',
     'http://127.0.0.1:5173',
-    'http://13.48.136.109:3001'
+    'http://13.48.136.109:3001',
+    'http://172.31.36.202:3001',
 
   ];
   devOrigins.forEach(origin => {
