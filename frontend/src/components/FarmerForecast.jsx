@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import '../styles/AdminPages.css';
-import { API_BASE_URL } from '../services/api';
-
-const API_URL = `${API_BASE_URL}/api`;
+import API from '../services/api';
 
 const FarmerForecast = ({ selectedVegetable, vegetableName }) => {
   const [forecastData, setForecastData] = useState(null);
@@ -25,10 +22,7 @@ const FarmerForecast = ({ selectedVegetable, vegetableName }) => {
     setLoading(true);
     setError('');
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_URL}/forecast/${selectedVegetable}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await API.get(`/forecast/${selectedVegetable}`);
       console.log('Farmer Forecast:', response.data);
       setForecastData(response.data || null);
     } catch (err) {

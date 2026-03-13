@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   BarChart, Bar, ComposedChart, Area
 } from 'recharts';
 import '../styles/AdminPages.css';
-import { API_BASE_URL } from '../services/api';
+import API from '../services/api';
 
 const DemandAnalysis = () => {
   const [demands, setDemands] = useState([]);
@@ -34,15 +33,10 @@ const DemandAnalysis = () => {
   const fetchDemandAnalysis = async (showLoading = true) => {
     try {
       if (showLoading) setLoading(true);
-      const token = localStorage.getItem('token');
       
       const [demandRes, vegRes] = await Promise.all([
-        axios.get(`${API_BASE_URL}/api/admin/demand-analysis`, {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-        axios.get(`${API_BASE_URL}/api/vegetables`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
+        API.get('/admin/demand-analysis'),
+        API.get('/vegetables')
       ]);
 
       setDemands(demandRes.data.demands || []);
@@ -70,10 +64,7 @@ const DemandAnalysis = () => {
   const fetch3TierForecast = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_BASE_URL}/api/admin/demand-analysis-3tier`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await API.get('/admin/demand-analysis-3tier');
       setForecast3Tier(response.data.data || []);
       if (response.data.data?.length > 0) {
         setSelectedVeg(response.data.data[0]);
@@ -88,10 +79,7 @@ const DemandAnalysis = () => {
   const analyzeDemand = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem('token');
-      await axios.post(`${API_BASE_URL}/api/admin/analyze-demand`, {}, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await API.post('/admin/analyze-demand');
       fetchDemandAnalysis();
     } catch (error) {
       console.error('Error analyzing demand:', error);

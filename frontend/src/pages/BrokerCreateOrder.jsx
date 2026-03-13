@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import VegetableSelect from '../components/VegetableSelect';
 import '../styles/PublishOrder.css';
-import { API_BASE_URL } from '../services/api';
+import API from '../services/api';
 
 const BrokerCreateOrder = () => {
     const [loading, setLoading] = useState(false);
@@ -53,15 +52,12 @@ const BrokerCreateOrder = () => {
         setSuccess('');
 
         try {
-            const token = localStorage.getItem('token');
             const formPayload = {
                 vegetableId: formData.vegetableId,
                 quantityRequired: parseInt(formData.requiredQuantity),
                 collectionLocation: `${formData.district}, ${formData.village}`
             };
-            const res = await axios.post(`${API_BASE_URL}/api/broker/buy-orders`, formPayload, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const res = await API.post('/broker/buy-orders', formPayload);
 
             setSuccess('Buy order published successfully!');
             setFormData({

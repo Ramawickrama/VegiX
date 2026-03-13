@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/PublishOrder.css';
-import axios from 'axios';
-import { API_BASE_URL } from '../services/api';
+import API from '../services/api';
 
 const BrokerPublishSellOrder = () => {
   const [vegetables, setVegetables] = useState([]);
@@ -26,17 +25,11 @@ const BrokerPublishSellOrder = () => {
 
   const fetchVegetablesAndPrices = async () => {
     try {
-      const token = localStorage.getItem('token');
-      
-      const vegResponse = await axios.get(`${API_BASE_URL}/api/vegetables`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const vegResponse = await API.get('/vegetables');
       // API returns { success, count, data: [...] }
       setVegetables(vegResponse.data.data || []);
 
-      const priceResponse = await axios.get(`${API_BASE_URL}/api/admin/market-prices`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const priceResponse = await API.get('/admin/market-prices');
       
       const priceMap = {};
       (priceResponse.data.prices || []).forEach((price) => {
@@ -88,11 +81,8 @@ const BrokerPublishSellOrder = () => {
     }
 
     try {
-      const token = localStorage.getItem('token');
       console.log('Publishing sell order:', formData);
-      await axios.post(`${API_BASE_URL}/api/broker/publish-sell-order`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await API.post('/broker/publish-sell-order', formData);
 
       setSuccessMessage('Sell order published successfully!');
       setFormData({

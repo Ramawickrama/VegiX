@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 import '../styles/AdminPages.css';
-import { API_BASE_URL } from '../services/api';
+import API from '../services/api';
 
 const FutureDemand = () => {
   const [forecasts, setForecasts] = useState([]);
@@ -16,10 +15,7 @@ const FutureDemand = () => {
 
   const fetchForecasts = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_BASE_URL}/api/admin/demand-forecast?months=3`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await API.get('/admin/demand-forecast?months=3');
       setForecasts(response.data.data || []);
       if (response.data.data?.length > 0) {
         setSelectedVeg(response.data.data[0]);

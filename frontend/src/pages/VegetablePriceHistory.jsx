@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area
 } from 'recharts';
 import '../styles/AdminPages.css';
-import { API_BASE_URL } from '../services/api';
+import API from '../services/api';
 
 const VegetablePriceHistory = () => {
     const { id } = useParams();
@@ -18,10 +17,7 @@ const VegetablePriceHistory = () => {
     const fetchData = useCallback(async () => {
         try {
             setLoading(true);
-            const token = localStorage.getItem('token');
-            const headers = { Authorization: `Bearer ${token}` };
-
-            const res = await axios.get(`${API_BASE_URL}/api/market-prices/${id}`, { headers });
+            const res = await API.get(`/market-prices/${id}`);
 
             setHistory(res.data.historicalData || []);
             setVegetable({

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   PieChart, Pie, Cell, LineChart, Line, AreaChart, Area
 } from 'recharts';
 import '../styles/AdminPages.css';
-import { API_BASE_URL } from '../services/api';
+import API from '../services/api';
 
 const COLORS = ['#4CAF50', '#2196F3', '#FF9800', '#E91E63', '#9C27B0', '#00BCD4'];
 
@@ -24,10 +23,7 @@ const AdminNationalDashboard = () => {
   const fetchOverview = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_BASE_URL}/api/market/overview`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await API.get('/market/overview');
       setOverview(response.data);
     } catch (error) {
       console.error('Error fetching overview:', error);
@@ -38,10 +34,8 @@ const AdminNationalDashboard = () => {
 
   const fetchDateRangeData = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(
-        `${API_BASE_URL}/api/market/date-range?startDate=${dateRange.startDate}&endDate=${dateRange.endDate}`,
-        { headers: { Authorization: `Bearer ${token}` } }
+      const response = await API.get(
+        `/market/date-range?startDate=${dateRange.startDate}&endDate=${dateRange.endDate}`
       );
       return response.data;
     } catch (error) {

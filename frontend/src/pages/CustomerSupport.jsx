@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import '../styles/AdminPages.css';
-import { API_BASE_URL } from '../services/api';
+import API from '../services/api';
 
 const CustomerSupport = () => {
   const [feedback, setFeedback] = useState([]);
@@ -13,10 +12,7 @@ const CustomerSupport = () => {
 
   const fetchFeedback = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_BASE_URL}/api/admin/feedback`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await API.get('/admin/feedback');
       setFeedback(response.data.feedback || []);
     } catch (error) {
       console.error('Error fetching feedback:', error);
@@ -27,11 +23,9 @@ const CustomerSupport = () => {
 
   const handleUpdateStatus = async (feedbackId, newStatus) => {
     try {
-      const token = localStorage.getItem('token');
-      await axios.put(
-        `${API_BASE_URL}/api/admin/feedback/${feedbackId}`,
-        { status: newStatus },
-        { headers: { Authorization: `Bearer ${token}` } }
+      await API.put(
+        `/admin/feedback/${feedbackId}`,
+        { status: newStatus }
       );
       fetchFeedback();
     } catch (error) {

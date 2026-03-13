@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import '../styles/BrokerBuyer.css';
-import { API_BASE_URL } from '../services/api';
+import API from '../services/api';
 
 const BrokerMarketPrices = () => {
     const [prices, setPrices] = useState([]);
@@ -18,9 +17,7 @@ const BrokerMarketPrices = () => {
                     setLoading(false);
                     return;
                 }
-                const response = await axios.get(`${API_BASE_URL}/api/broker/market-prices/today`, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
+                const response = await API.get('/broker/market-prices/today');
                 setPrices(response.data || []);
                 setError(null);
             } catch (err) {

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import VegetableSelect from '../components/VegetableSelect';
 import '../styles/BrokerBuyer.css';
-import { API_BASE_URL } from '../services/api';
+import API from '../services/api';
 
 const PublishSellOrder = () => {
     const [formData, setFormData] = useState({
@@ -54,10 +53,7 @@ const PublishSellOrder = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const token = localStorage.getItem('token');
-            await axios.post(`${API_BASE_URL}/api/broker/sell-orders`, formData, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            await API.post('/broker/sell-orders', formData);
             setMessage('Sell order published successfully! Visible to Buyers.');
             setFormData({ vegetableId: '', quantity: '', district: '', area: '', village: '' });
             setPricing({ price: 0, sellingPrice: 0, profit: 0 });
