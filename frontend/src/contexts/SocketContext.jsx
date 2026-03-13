@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { io } from 'socket.io-client';
-import { API_BASE_URL } from '../services/api';
+import { API_BASE, API_BASE_URL } from '../services/api';
 
 const SocketContext = createContext(null);
 
@@ -50,7 +50,7 @@ export const SocketProvider = ({ children }) => {
     userRef.current = user;
 
     try {
-      const socketUrl = API_BASE_URL;
+      const socketUrl = API_BASE;
 
       const newSocket = io(socketUrl, {
         auth: { token },

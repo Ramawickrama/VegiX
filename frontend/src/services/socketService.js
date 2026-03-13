@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client';
-import { API_BASE_URL } from './api';
+import { API_BASE, API_BASE_URL } from './api';
 
 let socket = null;
 
@@ -8,7 +8,7 @@ export const initializeSocket = (token) => {
     return socket;
   }
 
-  socket = io(import.meta.env?.VITE_API_URL || `${API_BASE_URL}`, {
+  socket = io(import.meta.env?.VITE_API_URL || API_BASE, {
     auth: { token },
     transports: ['websocket', 'polling'],
     reconnection: true,

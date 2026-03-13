@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import API from '../services/api';
+import { api, API_BASE } from '../services/api';
 import { useToast } from '../components/Toast';
 import '../styles/Auth.css';
 
@@ -27,7 +27,7 @@ const Login = ({ onLoginSuccess }) => {
     setLoading(true);
 
     try {
-      const response = await API.post('/auth/login', formData);
+      const response = await api.post(`${API_BASE}/api/auth/login`, formData);
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
       localStorage.setItem('userId', response.data.user.id);

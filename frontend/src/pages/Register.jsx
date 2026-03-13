@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import API from '../services/api';
+import { api } from '../services/api';
 import { useToast } from '../components/Toast';
 import '../styles/Auth.css';
 
@@ -53,7 +53,7 @@ const Register = () => {
     try {
       const { confirmPassword, ...registerData } = formData;
       registerData.email = registerData.email.toLowerCase().trim();
-      await API.post('/auth/register', registerData);
+      await api.post('/auth/register', registerData);
       toast.success(t('auth.registerSuccess'));
       navigate('/login');
     } catch (err) {
