@@ -22,7 +22,7 @@ const app = express();
 const server = http.createServer(app);
 
 // ─── CORS Configuration ──────────────────────────────────────────────────────
-const ALLOWED_ORIGINS = [config.FRONTEND_URL];
+const ALLOWED_ORIGINS = [config.CLIENT_URL];
 
 // In development, allow various localhost ports
 if (config.NODE_ENV !== 'production') {

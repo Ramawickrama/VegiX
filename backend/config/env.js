@@ -34,7 +34,7 @@ module.exports = {
     NODE_ENV: process.env.NODE_ENV || 'development',
     MONGO_URI: MONGO_URI,
     JWT_SECRET: process.env.JWT_SECRET,
-    FRONTEND_URL: process.env.FRONTEND_URL || process.env.CLIENT_URL || 'http://13.48.136.109:3000',
+    CLIENT_URL: process.env.CLIENT_URL || 'http://13.48.136.109:3000',
 
     // Email (optional)
     EMAIL_SERVICE: process.env.EMAIL_SERVICE || 'gmail',
