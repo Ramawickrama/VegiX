@@ -1,16 +1,14 @@
 import axios from "axios";
 
-export const VITE_API_URL = import.meta.env.VITE_API_URL || "http://13.48.136.109:5000";
+export const VITE_API_URL = import.meta.env.VITE_API_URL || (typeof window !== 'undefined' && window.location.hostname === '13.48.136.109' ? "http://13.48.136.109:5000" : "http://localhost:5000");
 
 export const API_BASE_URL = VITE_API_URL;
 
-export const API_FULL_BASE_URL = VITE_API_URL.startsWith('/') 
+export const API_FULL_BASE_URL = VITE_API_URL.endsWith('/api') 
     ? VITE_API_URL 
     : `${VITE_API_URL}/api`;
 
-const baseUrl = VITE_API_URL.startsWith('/') 
-    ? VITE_API_URL 
-    : `${VITE_API_URL}/api`;
+const baseUrl = API_FULL_BASE_URL;
 
 const API = axios.create({
     baseURL: baseUrl,
