@@ -8,11 +8,13 @@ const startForecastScheduler = () => {
   cron.schedule('0 0 * * *', async () => {
     console.log('[Scheduler] Running daily forecast generation at midnight...');
     try {
-      await forecastService.generateDemoDataIfEmpty();
+      if (typeof forecastService.generateDemoDataIfEmpty === 'function') {
+        await forecastService.generateDemoDataIfEmpty();
+      }
       await forecastService.generateAllForecasts();
       console.log('[Scheduler] Daily forecast generation completed successfully');
     } catch (error) {
-      console.error('[Scheduler] Error running daily forecast:', error);
+      console.error('[Scheduler] Error running daily forecast:', error.message);
     }
   });
 
@@ -38,11 +40,15 @@ const startMarketPriceScheduler = () => {
 const runInitialForecast = async () => {
   console.log('[Scheduler] Running initial forecast generation...');
   try {
-    await forecastService.generateDemoDataIfEmpty();
+    if (typeof forecastService.generateDemoDataIfEmpty === 'function') {
+      await forecastService.generateDemoDataIfEmpty();
+    } else {
+      console.warn('[Scheduler] forecastService.generateDemoDataIfEmpty not available — skipping demo generation');
+    }
     await forecastService.generateAllForecasts();
     console.log('[Scheduler] Initial forecast generation completed');
   } catch (error) {
-    console.error('[Scheduler] Error running initial forecast:', error);
+    console.error('[Scheduler] Error running initial forecast:', error.message);
   }
 };
 

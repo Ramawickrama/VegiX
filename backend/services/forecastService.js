@@ -165,7 +165,12 @@ async function getHistoricalPrices(vegetableId, days = 30) {
   return prices || [];
 }
 
+async function generateDemoDataIfEmpty() {
+  console.log('[ForecastService] Demo data generation skipped (no-op in production)');
+}
+
 module.exports = {
+  generateDemoDataIfEmpty,
   getPriceForecast,
   getDemandForecast,
   getAllPriceForecasts,
