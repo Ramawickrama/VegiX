@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import '../styles/AdminPages.css';
-import { API_BASE_URL } from '../services/api';
+import API from '../services/api';
 
 const MarketPrices = () => {
   const [vegetables, setVegetables] = useState([]);
@@ -30,10 +29,7 @@ const MarketPrices = () => {
 const fetchData = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
-      const res = await axios.get(`${API_BASE_URL}/api/admin/vegetables`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await API.get('/admin/vegetables');
       setVegetables(res.data.data.map(v => ({
         ...v,
         editablePrice: v.currentPrice,

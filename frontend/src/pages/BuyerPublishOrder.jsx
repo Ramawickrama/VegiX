@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import '../styles/PublishOrder.css';
-import { API_BASE_URL } from '../services/api';
+import API from '../services/api';
 
 const BuyerPublishOrder = () => {
   const [loading, setLoading] = useState(false);
@@ -29,10 +28,7 @@ const BuyerPublishOrder = () => {
     setLoading(true);
 
     try {
-      const token = localStorage.getItem('token');
-      await axios.post(`${API_BASE_URL}/api/buyer/publish-order`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await API.post('/buyer/publish-order', formData);
 
       setSuccessMessage('Order published successfully! Brokers will see your request.');
       setFormData({

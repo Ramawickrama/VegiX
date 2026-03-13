@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { API_BASE_URL } from '../services/api';
+import API from '../services/api';
 import { useSocket } from '../contexts/SocketContext';
 import { useTranslation } from 'react-i18next';
 
@@ -81,9 +80,7 @@ const FarmerBrokerOrders = () => {
 
       // Fetch vegetables - API returns { success: true, data: [...] }
       try {
-        const vegResponse = await axios.get(`${API_BASE_URL}/api/vegetables`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const vegResponse = await API.get('/vegetables');
         // Handle response format: { success: true, data: [...] } or just [...]
         const vegData = vegResponse.data?.data || vegResponse.data || [];
         if (vegData.length > 0) {
@@ -99,9 +96,7 @@ const FarmerBrokerOrders = () => {
       }
 
       // Fetch broker orders
-      const response = await axios.get(`${API_BASE_URL}/api/farmer/broker-buying-requests`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await API.get('/farmer/broker-buying-requests');
 
       console.log('API Response:', response.data);
 
@@ -214,11 +209,8 @@ const FarmerBrokerOrders = () => {
     setContactingBroker(order._id);
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.post(
-        `${API_BASE_URL}/api/farmer/broker-orders/${order._id}/contact-broker`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
+      const response = await API.post(
+        `/farmer/broker-orders/${order._id}/contact-broker`
       );
 
       if (response.data.success && response.data.conversationId) {

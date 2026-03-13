@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import OrderCard from '../components/OrderCard';
 import '../styles/ViewOrders.css';
-import { API_BASE_URL } from '../services/api';
+import API from '../services/api';
 
 const FarmerViewBrokerOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -18,10 +17,7 @@ const FarmerViewBrokerOrders = () => {
 
   const fetchOrders = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_BASE_URL}/api/farmer/broker-orders`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await API.get('/farmer/broker-orders');
       setOrders(response.data.offers || []);
     } catch (error) {
       console.error('Error fetching orders:', error);
@@ -59,11 +55,8 @@ const FarmerViewBrokerOrders = () => {
     setContactingBroker(order._id);
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.post(
-        `${API_BASE_URL}/api/farmer/broker-orders/${order._id}/contact-broker`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
+      const response = await API.post(
+        `/farmer/broker-orders/${order._id}/contact-broker`
       );
 
       if (response.data.success && response.data.conversationId) {

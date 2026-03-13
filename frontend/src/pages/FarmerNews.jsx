@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import '../styles/Dashboard.css';
-import { API_BASE_URL } from '../services/api';
+import API from '../services/api';
 
 const FarmerNews = () => {
   const [notices, setNotices] = useState([]);
@@ -14,10 +13,7 @@ const FarmerNews = () => {
 
   const markNoticesSeen = async () => {
     try {
-      const token = localStorage.getItem('token');
-      await axios.post(`${API_BASE_URL}/api/admin/notices/mark-seen`, {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await API.post('/admin/notices/mark-seen');
       window.dispatchEvent(new Event('notices-marked-seen'));
     } catch (error) {
       console.error('Error marking notices as seen:', error);
@@ -26,10 +22,7 @@ const FarmerNews = () => {
 
   const fetchNotices = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_BASE_URL}/api/admin/notices`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await API.get('/admin/notices');
       // Filter notices visible to farmers
       const farmerNotices = (response.data.notices || []).filter(
         notice => !notice.visibility || notice.visibility.includes('farmer')

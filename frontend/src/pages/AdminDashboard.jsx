@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
@@ -11,7 +10,7 @@ import '../styles/Dashboard.css';
 import '../components/StatCard.css';
 import '../components/Card.css';
 import '../components/Button.css';
-import { API_BASE_URL } from '../services/api';
+import API from '../services/api';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 
@@ -30,12 +29,9 @@ const AdminDashboard = ({ user }) => {
 
   const fetchData = useCallback(async () => {
     try {
-      const token = localStorage.getItem('token');
-      const headers = { Authorization: `Bearer ${token}` };
-
       const [statsRes, demandRes] = await Promise.all([
-        axios.get(`${API_BASE_URL}/api/admin/user-stats`, { headers }),
-        axios.get(`${API_BASE_URL}/api/admin/demand-analysis`, { headers })
+        API.get('/admin/user-stats'),
+        API.get('/admin/demand-analysis')
       ]);
 
       setStats(statsRes.data);

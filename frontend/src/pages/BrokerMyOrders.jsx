@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import axios from 'axios';
 import { useSocket } from '../contexts/SocketContext';
 import VegetableSelect from '../components/VegetableSelect';
 import '../styles/DataTables.css';
 import '../styles/PublishOrder.css';
-import { API_BASE_URL } from '../services/api';
-
-const API_URL = `${API_BASE_URL}/api/broker`;
+import API from '../services/api';
 
 const BrokerMyOrders = ({ user }) => {
   const [activeTab, setActiveTab] = useState('buy');
@@ -35,11 +32,8 @@ const BrokerMyOrders = ({ user }) => {
 
   const fetchBuyOrders = useCallback(async () => {
     try {
-      const token = localStorage.getItem('token');
       const params = statusFilter ? `?status=${statusFilter}` : '';
-      const res = await axios.get(`${API_URL}/buy-orders${params}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await API.get(`/broker/buy-orders${params}`);
       if (isMountedRef.current) {
         setBuyOrders(res.data.orders || []);
       }
@@ -53,11 +47,8 @@ const BrokerMyOrders = ({ user }) => {
 
   const fetchSellOrders = useCallback(async () => {
     try {
-      const token = localStorage.getItem('token');
       const params = statusFilter ? `?status=${statusFilter}` : '';
-      const res = await axios.get(`${API_URL}/sell-orders${params}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await API.get(`/broker/sell-orders${params}`);
       if (isMountedRef.current) {
         setSellOrders(res.data.orders || []);
       }
@@ -142,11 +133,8 @@ const BrokerMyOrders = ({ user }) => {
 
   const handleStatusChange = async (orderId, newStatus, type) => {
     try {
-      const token = localStorage.getItem('token');
       const endpoint = type === 'buy' ? 'buy-orders' : 'sell-orders';
-      await axios.patch(`${API_URL}/${endpoint}/${orderId}`, { status: newStatus }, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await API.patch(`/broker/${endpoint}/${orderId}`, { status: newStatus });
       if (type === 'buy') {
         fetchBuyOrders();
       } else {
@@ -162,15 +150,12 @@ const BrokerMyOrders = ({ user }) => {
     if (!window.confirm('Are you sure you want to permanently delete this order? This action cannot be undone.')) return;
 
     try {
-      const token = localStorage.getItem('token');
       const endpoint = type === 'buy' ? 'buy-orders' : 'sell-orders';
       const deleteEndpoint = type === 'buy' 
-        ? `${API_URL}/${endpoint}/${orderId}/permanent`
-        : `${API_URL}/${endpoint}/${orderId}`;
+        ? `/broker/${endpoint}/${orderId}/permanent`
+        : `/broker/${endpoint}/${orderId}`;
       
-      await axios.delete(deleteEndpoint, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await API.delete(deleteEndpoint);
       
       if (type === 'buy') {
         fetchBuyOrders();
@@ -213,12 +198,9 @@ const BrokerMyOrders = ({ user }) => {
     setEditSuccess('');
 
     try {
-      const token = localStorage.getItem('token');
       const endpoint = editingOrder.type === 'buy' ? 'buy-orders' : 'sell-orders';
 
-      await axios.patch(`${API_URL}/${endpoint}/${editingOrder._id}`, editFormData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await API.patch(`/broker/${endpoint}/${editingOrder._id}`, editFormData);
 
       setEditSuccess('Order updated successfully!');
       setTimeout(() => {

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
 import '../styles/AdminPages.css';
-import { API_BASE_URL } from '../services/api';
+import API from '../services/api';
 
 const NoticeManagement = () => {
   const [notices, setNotices] = useState([]);
@@ -27,10 +26,7 @@ const NoticeManagement = () => {
 
   const fetchNotices = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_BASE_URL}/api/admin/notices`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await API.get('/admin/notices');
       setNotices(response.data.notices || []);
     } catch (error) {
       console.error('Error fetching notices:', error);
@@ -67,13 +63,11 @@ const NoticeManagement = () => {
 
     setUploading(true);
     try {
-      const token = localStorage.getItem('token');
       const formData = new FormData();
       files.forEach(file => formData.append('images', file));
 
-      const res = await axios.post(`${API_BASE_URL}/api/admin/upload-notice-images`, formData, {
+      const res = await API.post('/admin/upload-notice-images', formData, {
         headers: {
-          Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
         }
       });
@@ -140,13 +134,9 @@ const NoticeManagement = () => {
       }
 
       if (editingId) {
-        await axios.put(`${API_BASE_URL}/api/admin/notice/${editingId}`, noticeData, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await API.put(`/admin/notice/${editingId}`, noticeData);
       } else {
-        await axios.post(`${API_BASE_URL}/api/admin/notice`, noticeData, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await API.post('/admin/notice', noticeData);
       }
 
       setNewNotice({
@@ -191,10 +181,7 @@ const NoticeManagement = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this notice?')) return;
     try {
-      const token = localStorage.getItem('token');
-      await axios.delete(`${API_BASE_URL}/api/admin/notice/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await API.delete(`/admin/notice/${id}`);
       fetchNotices();
     } catch (error) {
       console.error('Error deleting notice:', error);

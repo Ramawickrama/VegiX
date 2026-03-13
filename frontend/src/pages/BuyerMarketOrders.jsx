@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import VegetableSelect from '../components/VegetableSelect';
 import { useToast } from '../components/Toast';
 import { formatPrice } from '../utils/priceUtils';
 import '../styles/BrokerBuyer.css';
-import { API_BASE_URL } from '../services/api';
-
-const API_BASE = `${API_BASE_URL}/api/buyer`;
+import API from '../services/api';
 
 const styles = {
     container: {
@@ -92,17 +89,13 @@ const BuyerMarketOrders = () => {
     const fetchOrders = async () => {
         try {
             setLoading(true);
-            const token = localStorage.getItem('token');
-            
             const params = new URLSearchParams();
             if (filters.vegetableId) params.append('vegetableId', filters.vegetableId);
             if (filters.district) params.append('district', filters.district);
             if (filters.village) params.append('village', filters.village);
             if (filters.date) params.append('date', filters.date);
 
-            const res = await axios.get(`${API_BASE}/market-orders?${params.toString()}`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const res = await API.get(`/buyer/market-orders?${params.toString()}`);
             setOrders(res.data);
         } catch (error) {
             console.error(error);
@@ -142,10 +135,7 @@ const BuyerMarketOrders = () => {
 
     const handleContact = async (orderId) => {
         try {
-            const token = localStorage.getItem('token');
-            const res = await axios.post(`${API_BASE}/market-orders/${orderId}/contact`, {}, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const res = await API.post(`/buyer/market-orders/${orderId}/contact`);
 
             if (res.data.success && res.data.conversationId) {
                 navigate(`/buyer/messages?conversationId=${res.data.conversationId}`);
@@ -160,10 +150,7 @@ const BuyerMarketOrders = () => {
 
     const handleAddToCart = async (orderId) => {
         try {
-            const token = localStorage.getItem('token');
-            const res = await axios.post(`${API_BASE}/cart/${orderId}`, {}, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const res = await API.post(`/buyer/cart/${orderId}`);
 
             if (res.data.success) {
                 toast.success('Added to cart!');

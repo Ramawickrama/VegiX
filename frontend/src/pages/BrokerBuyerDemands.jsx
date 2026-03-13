@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useSocket } from '../contexts/SocketContext';
 import { useTranslation } from 'react-i18next';
 import VegetableSelect from '../components/VegetableSelect';
 import '../styles/BrokerBuyer.css';
-import { API_BASE_URL } from '../services/api';
-
-const API_URL = `${API_BASE_URL}/api/broker`;
+import API from '../services/api';
 
 const BrokerBuyerDemands = ({ user }) => {
   const [demands, setDemands] = useState([]);
@@ -41,7 +38,6 @@ const BrokerBuyerDemands = ({ user }) => {
   const fetchDemands = useCallback(async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
 
       const params = new URLSearchParams();
       if (filters.vegetableId) params.append('vegetableId', filters.vegetableId);
@@ -50,9 +46,7 @@ const BrokerBuyerDemands = ({ user }) => {
       if (filters.minQuantity) params.append('minQuantity', filters.minQuantity);
       if (filters.maxQuantity) params.append('maxQuantity', filters.maxQuantity);
 
-      const res = await axios.get(`${API_URL}/buyer-demands?${params.toString()}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await API.get(`/broker/buyer-demands?${params.toString()}`);
       setDemands(res.data || []);
     } catch (err) {
       console.error('Error fetching buyer demands:', err);
@@ -104,10 +98,7 @@ const BrokerBuyerDemands = ({ user }) => {
 
   const handleContact = async (demandId) => {
     try {
-      const token = localStorage.getItem('token');
-      const res = await axios.post(`${API_URL}/buyer-demands/${demandId}/contact`, {}, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await API.post(`/broker/buyer-demands/${demandId}/contact`);
 
       if (res.data.success) {
         navigate(`/broker/messages?email=${encodeURIComponent(res.data.otherUser.email)}`);

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../styles/ViewOrders.css';
-import { API_BASE_URL } from '../services/api';
+import API from '../services/api';
 
 const BrokerViewBuyerOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -27,10 +26,7 @@ const BrokerViewBuyerOrders = () => {
 
   const fetchVegetables = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_BASE_URL}/api/vegetables`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await API.get('/vegetables');
       setVegetables(response.data || []);
     } catch (error) {
       console.error('Error fetching vegetables:', error);
@@ -40,19 +36,15 @@ const BrokerViewBuyerOrders = () => {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem('token');
-      
       // Build query params
       const params = new URLSearchParams();
       if (vegetableId) params.append('vegetableId', vegetableId);
       if (selectedDate) params.append('deliveryDate', selectedDate);
       
       const queryString = params.toString();
-      const url = `${API_BASE_URL}/api/broker/buyer-orders${queryString ? '?' + queryString : ''}`;
+      const url = `/broker/buyer-orders${queryString ? '?' + queryString : ''}`;
       
-      const response = await axios.get(url, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await API.get(url);
       setOrders(response.data.orders || []);
     } catch (error) {
       console.error('Error fetching orders:', error);
@@ -92,11 +84,8 @@ const BrokerViewBuyerOrders = () => {
     setContactingBuyer(order._id);
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.post(
-        `${API_BASE_URL}/api/broker/buyer-orders/${order._id}/contact`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
+      const response = await API.post(
+        `/broker/buyer-orders/${order._id}/contact`
       );
 
       if (response.data.success) {

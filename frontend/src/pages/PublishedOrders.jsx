@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import '../styles/AdminPages.css';
-import { API_BASE_URL } from '../services/api';
+import API from '../services/api';
 
 const PublishedOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -29,10 +28,7 @@ const PublishedOrders = () => {
 
   const fetchVegetables = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const res = await axios.get(`${API_BASE_URL}/api/vegetables`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await API.get('/vegetables');
       const vegData = res.data.data || res.data;
       setVegetables(Array.isArray(vegData) ? vegData : []);
     } catch (err) {
@@ -43,9 +39,7 @@ const PublishedOrders = () => {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem('token');
-      const res = await axios.get(`${API_BASE_URL}/api/admin/published-orders`, {
-        headers: { Authorization: `Bearer ${token}` },
+      const res = await API.get('/admin/published-orders', {
         params: {
           date: filters.date,
           vegetableId: filters.vegetableId,

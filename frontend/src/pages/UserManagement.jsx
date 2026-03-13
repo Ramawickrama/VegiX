@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import '../styles/AdminPages.css';
-import { API_BASE_URL } from '../services/api';
+import API from '../services/api';
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -14,17 +13,12 @@ const UserManagement = () => {
 
   const fetchUsers = async () => {
     try {
-      const token = localStorage.getItem('token');
       let response;
 
       if (filterRole === 'all') {
-        response = await axios.get(`${API_BASE_URL}/api/admin/users`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        response = await API.get('/admin/users');
       } else {
-        response = await axios.get(`${API_BASE_URL}/api/admin/users-by-role/${filterRole}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        response = await API.get(`/admin/users-by-role/${filterRole}`);
       }
 
       setUsers(response.data.users || []);
@@ -38,10 +32,7 @@ const UserManagement = () => {
   const handleDeleteUser = async (userId) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
       try {
-        const token = localStorage.getItem('token');
-        await axios.delete(`${API_BASE_URL}/api/admin/user/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await API.delete(`/admin/user/${userId}`);
         fetchUsers();
       } catch (error) {
         console.error('Error deleting user:', error);

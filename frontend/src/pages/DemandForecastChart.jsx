@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import '../styles/AdminPages.css';
-import { API_BASE_URL } from '../services/api';
-
-const API_URL = `${API_BASE_URL}/api`;
+import API from '../services/api';
 
 const DemandForecastChart = () => {
   const [vegetables, setVegetables] = useState([]);
@@ -19,10 +16,7 @@ const DemandForecastChart = () => {
 
   const fetchVegetables = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_URL}/vegetables`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await API.get('/vegetables');
       const veggies = response.data || [];
       setVegetables(veggies);
       if (veggies.length > 0) {
@@ -47,10 +41,7 @@ const DemandForecastChart = () => {
     setLoading(true);
     setError('');
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_URL}/forecast/${selectedVegetable}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await API.get(`/forecast/${selectedVegetable}`);
       console.log('Forecast API response:', response.data);
       setForecastData(response.data || null);
     } catch (err) {
@@ -65,10 +56,7 @@ const DemandForecastChart = () => {
   const triggerForecast = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem('token');
-      await axios.post(`${API_URL}/forecast/generate`, {}, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await API.post('/forecast/generate');
       await fetchForecast();
     } catch (err) {
       console.error('Error triggering forecast:', err);
