@@ -82,6 +82,32 @@ const io = socketio(server, {
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// ─── Markdown Docs Router ───────────────────────────────────────────────────
+// Allows access to Markdown (.md) files in the project via ${API_BASE}/*.md
+app.get('/*.md', (req, res) => {
+  const filePathParam = req.path; // e.g., '/README.md'
+  if (!filePathParam.endsWith('.md')) {
+    return res.status(403).json({ error: 'Only markdown (.md) files are accessible' });
+  }
+
+  // Serve from project root directory
+  const rootDir = path.join(__dirname, '..');
+  // decodeURI to handle spaces, etc.
+  const absolutePath = path.resolve(rootDir, decodeURIComponent(filePathParam.slice(1))); // remove leading slash
+
+  // Security check: Prevent directory traversal outside of rootDir
+  if (!absolutePath.startsWith(rootDir)) {
+    return res.status(403).json({ error: 'Access denied' });
+  }
+
+  res.sendFile(absolutePath, (err) => {
+    if (err && !res.headersSent) {
+      res.status(404).json({ error: 'Markdown file not found' });
+    }
+  });
+});
+
 app.use(responseMiddleware);
 
 // Initialize Socket.io services
