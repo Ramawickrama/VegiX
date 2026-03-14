@@ -1,10 +1,97 @@
 {
   "info": {
     "name": "VegiX Order Publishing API",
-    "description": "Test collection for Farmer, Broker, and Buyer order publishing functionality",
+    "description": "Test collection for Farmer, Broker, and Buyer order publishing functionality.\n\n## Setup Instructions\n1. Create a Postman Environment with variable:\n   - `baseUrl` = http://13.48.136.109:5000\n2. Run 'Health Check' to verify backend is running\n3. Run Login requests (Farmer/Broker/Buyer) to populate tokens:\n   - {{farmerToken}}, {{brokerToken}}, {{buyerToken}}\n4. Run 'Get Vegetables' to populate {{vegetableId}}\n5. Use the token variables for protected endpoints",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://13.48.136.109:5000"
+    },
+    {
+      "key": "farmerToken",
+      "value": ""
+    },
+    {
+      "key": "brokerToken",
+      "value": ""
+    },
+    {
+      "key": "buyerToken",
+      "value": ""
+    },
+    {
+      "key": "vegetableId",
+      "value": ""
+    }
+  ],
   "item": [
+    {
+      "name": "Utilities",
+      "item": [
+        {
+          "name": "Health Check (Ping)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/ping",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ping"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Vegetables",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{farmerToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/vegetables",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "vegetables"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const jsonData = pm.response.json();",
+                  "    const vegetables = jsonData.data || jsonData;",
+                  "    if (vegetables && vegetables.length > 0) {",
+                  "        pm.environment.set('vegetableId', vegetables[0]._id);",
+                  "        console.log('Stored vegetableId:', vegetables[0]._id, '-', vegetables[0].name);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
     {
       "name": "Authentication",
       "item": [
@@ -20,18 +107,13 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"John Farmer\",\n  \"email\": \"farmer@vegix.com\",\n  \"phone\": \"0712345678\",\n  \"password\": \"password123\",\n  \"role\": \"farmer\",\n  \"location\": \"Colombo\",\n  \"company\": \"John's Farm\"\n}"
+              "raw": "{\n  \"name\": \"John Farmer\",\n  \"email\": \"farmer1@vegix.com\",\n  \"phone\": \"0712345678\",\n  \"password\": \"password123\",\n  \"role\": \"farmer\",\n  \"location\": \"Colombo\",\n  \"company\": \"John's Farm\"\n}"
             },
             "url": {
-              "raw": "http://13.48.136.109:5000/api/auth/register",
-              "protocol": "http",
+              "raw": "{{baseUrl}}/api/auth/register",
               "host": [
-                "13",
-                "48",
-                "136",
-                "109"
+                "{{baseUrl}}"
               ],
-              "port": "5000",
               "path": [
                 "api",
                 "auth",
@@ -52,18 +134,13 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Jane Broker\",\n  \"email\": \"broker@vegix.com\",\n  \"phone\": \"0787654321\",\n  \"password\": \"password123\",\n  \"role\": \"broker\",\n  \"location\": \"Colombo Market\",\n  \"company\": \"Jane's Trading\"\n}"
+              "raw": "{\n  \"name\": \"Jane Broker\",\n  \"email\": \"broker1@vegix.com\",\n  \"phone\": \"0787654321\",\n  \"password\": \"password123\",\n  \"role\": \"broker\",\n  \"location\": \"Colombo Market\",\n  \"company\": \"Jane's Trading\"\n}"
             },
             "url": {
-              "raw": "http://13.48.136.109:5000/api/auth/register",
-              "protocol": "http",
+              "raw": "{{baseUrl}}/api/auth/register",
               "host": [
-                "13",
-                "48",
-                "136",
-                "109"
+                "{{baseUrl}}"
               ],
-              "port": "5000",
               "path": [
                 "api",
                 "auth",
@@ -84,18 +161,13 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Bob Buyer\",\n  \"email\": \"buyer@vegix.com\",\n  \"phone\": \"0712999888\",\n  \"password\": \"password123\",\n  \"role\": \"buyer\",\n  \"location\": \"Colombo\",\n  \"company\": \"Restaurant XYZ\"\n}"
+              "raw": "{\n  \"name\": \"Bob Buyer\",\n  \"email\": \"buyer1@vegix.com\",\n  \"phone\": \"0712999888\",\n  \"password\": \"password123\",\n  \"role\": \"buyer\",\n  \"location\": \"Colombo\",\n  \"company\": \"Restaurant XYZ\"\n}"
             },
             "url": {
-              "raw": "http://13.48.136.109:5000/api/auth/register",
-              "protocol": "http",
+              "raw": "{{baseUrl}}/api/auth/register",
               "host": [
-                "13",
-                "48",
-                "136",
-                "109"
+                "{{baseUrl}}"
               ],
-              "port": "5000",
               "path": [
                 "api",
                 "auth",
@@ -116,25 +188,37 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"farmer@vegix.com\",\n  \"password\": \"password123\"\n}"
+              "raw": "{\n  \"email\": \"farmer1@vegix.com\",\n  \"password\": \"password123\"\n}"
             },
             "url": {
-              "raw": "http://13.48.136.109:5000/api/auth/login",
-              "protocol": "http",
+              "raw": "{{baseUrl}}/api/auth/login",
               "host": [
-                "13",
-                "48",
-                "136",
-                "109"
+                "{{baseUrl}}"
               ],
-              "port": "5000",
               "path": [
                 "api",
                 "auth",
                 "login"
               ]
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.token) {",
+                  "        pm.environment.set('farmerToken', jsonData.token);",
+                  "        console.log('Stored farmerToken');",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
         },
         {
           "name": "Login Broker",
@@ -148,25 +232,37 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"broker@vegix.com\",\n  \"password\": \"password123\"\n}"
+              "raw": "{\n  \"email\": \"broker1@vegix.com\",\n  \"password\": \"password123\"\n}"
             },
             "url": {
-              "raw": "http://13.48.136.109:5000/api/auth/login",
-              "protocol": "http",
+              "raw": "{{baseUrl}}/api/auth/login",
               "host": [
-                "13",
-                "48",
-                "136",
-                "109"
+                "{{baseUrl}}"
               ],
-              "port": "5000",
               "path": [
                 "api",
                 "auth",
                 "login"
               ]
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.token) {",
+                  "        pm.environment.set('brokerToken', jsonData.token);",
+                  "        console.log('Stored brokerToken');",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
         },
         {
           "name": "Login Buyer",
@@ -180,25 +276,37 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"buyer@vegix.com\",\n  \"password\": \"password123\"\n}"
+              "raw": "{\n  \"email\": \"buyer1@vegix.com\",\n  \"password\": \"password123\"\n}"
             },
             "url": {
-              "raw": "http://13.48.136.109:5000/api/auth/login",
-              "protocol": "http",
+              "raw": "{{baseUrl}}/api/auth/login",
               "host": [
-                "13",
-                "48",
-                "136",
-                "109"
+                "{{baseUrl}}"
               ],
-              "port": "5000",
               "path": [
                 "api",
                 "auth",
                 "login"
               ]
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.token) {",
+                  "        pm.environment.set('buyerToken', jsonData.token);",
+                  "        console.log('Stored buyerToken');",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
         }
       ]
     },
@@ -216,23 +324,18 @@
               },
               {
                 "key": "Authorization",
-                "value": "Bearer <FARMER_TOKEN>"
+                "value": "Bearer {{farmerToken}}"
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"vegetableId\": \"<VEGETABLE_ID>\",\n  \"quantity\": 100,\n  \"unit\": \"kg\",\n  \"pricePerUnit\": 150,\n  \"location\": \"Colombo\",\n  \"quality\": \"premium\",\n  \"description\": \"Fresh organic tomatoes from my farm\",\n  \"deliveryDate\": \"2026-02-28\"\n}"
+              "raw": "{\n  \"vegetableId\": \"{{vegetableId}}\",\n  \"quantity\": 100,\n  \"unit\": \"kg\",\n  \"location\": \"Colombo\",\n  \"quality\": \"premium\",\n  \"description\": \"Fresh organic vegetables from my farm\",\n  \"deliveryDate\": \"2026-03-20\"\n}"
             },
             "url": {
-              "raw": "http://13.48.136.109:5000/api/farmer/publish-order",
-              "protocol": "http",
+              "raw": "{{baseUrl}}/api/farmer/publish-order",
               "host": [
-                "13",
-                "48",
-                "136",
-                "109"
+                "{{baseUrl}}"
               ],
-              "port": "5000",
               "path": [
                 "api",
                 "farmer",
@@ -248,19 +351,14 @@
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer <FARMER_TOKEN>"
+                "value": "Bearer {{farmerToken}}"
               }
             ],
             "url": {
-              "raw": "http://13.48.136.109:5000/api/farmer/my-orders",
-              "protocol": "http",
+              "raw": "{{baseUrl}}/api/farmer/my-orders",
               "host": [
-                "13",
-                "48",
-                "136",
-                "109"
+                "{{baseUrl}}"
               ],
-              "port": "5000",
               "path": [
                 "api",
                 "farmer",
@@ -276,19 +374,14 @@
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer <FARMER_TOKEN>"
+                "value": "Bearer {{farmerToken}}"
               }
             ],
             "url": {
-              "raw": "http://13.48.136.109:5000/api/farmer/broker-orders",
-              "protocol": "http",
+              "raw": "{{baseUrl}}/api/farmer/broker-orders",
               "host": [
-                "13",
-                "48",
-                "136",
-                "109"
+                "{{baseUrl}}"
               ],
-              "port": "5000",
               "path": [
                 "api",
                 "farmer",
@@ -313,27 +406,22 @@
               },
               {
                 "key": "Authorization",
-                "value": "Bearer <BROKER_TOKEN>"
+                "value": "Bearer {{brokerToken}}"
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"vegetableId\": \"<VEGETABLE_ID>\",\n  \"quantity\": 200,\n  \"unit\": \"kg\",\n  \"pricePerUnit\": 140,\n  \"location\": \"Colombo Market\",\n  \"quality\": \"standard\",\n  \"description\": \"Buying from farmers for market supply\",\n  \"deliveryDate\": \"2026-02-25\"\n}"
+              "raw": "{\n  \"vegetableId\": \"{{vegetableId}}\",\n  \"quantityRequired\": 200,\n  \"collectionLocation\": \"Colombo Market\"\n}"
             },
             "url": {
-              "raw": "http://13.48.136.109:5000/api/broker/publish-buy-order",
-              "protocol": "http",
+              "raw": "{{baseUrl}}/api/broker/buy-orders",
               "host": [
-                "13",
-                "48",
-                "136",
-                "109"
+                "{{baseUrl}}"
               ],
-              "port": "5000",
               "path": [
                 "api",
                 "broker",
-                "publish-buy-order"
+                "buy-orders"
               ]
             }
           }
@@ -349,55 +437,68 @@
               },
               {
                 "key": "Authorization",
-                "value": "Bearer <BROKER_TOKEN>"
+                "value": "Bearer {{brokerToken}}"
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"vegetableId\": \"<VEGETABLE_ID>\",\n  \"quantity\": 150,\n  \"unit\": \"kg\",\n  \"pricePerUnit\": 180,\n  \"location\": \"Colombo\",\n  \"quality\": \"premium\",\n  \"description\": \"Fresh tomatoes available for bulk orders\",\n  \"deliveryDate\": \"2026-02-26\"\n}"
+              "raw": "{\n  \"vegetableId\": \"{{vegetableId}}\",\n  \"quantity\": 150,\n  \"district\": \"Colombo\",\n  \"area\": \"Pettah\",\n  \"village\": \"Market Area\"\n}"
             },
             "url": {
-              "raw": "http://13.48.136.109:5000/api/broker/publish-sell-order",
-              "protocol": "http",
+              "raw": "{{baseUrl}}/api/broker/sell-orders",
               "host": [
-                "13",
-                "48",
-                "136",
-                "109"
+                "{{baseUrl}}"
               ],
-              "port": "5000",
               "path": [
                 "api",
                 "broker",
-                "publish-sell-order"
+                "sell-orders"
               ]
             }
           }
         },
         {
-          "name": "Get My Orders",
+          "name": "Get My Buy Orders",
           "request": {
             "method": "GET",
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer <BROKER_TOKEN>"
+                "value": "Bearer {{brokerToken}}"
               }
             ],
             "url": {
-              "raw": "http://13.48.136.109:5000/api/broker/my-orders",
-              "protocol": "http",
+              "raw": "{{baseUrl}}/api/broker/buy-orders",
               "host": [
-                "13",
-                "48",
-                "136",
-                "109"
+                "{{baseUrl}}"
               ],
-              "port": "5000",
               "path": [
                 "api",
                 "broker",
-                "my-orders"
+                "buy-orders"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get My Sell Orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{brokerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/broker/sell-orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "broker",
+                "sell-orders"
               ]
             }
           }
@@ -409,23 +510,19 @@
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer <BROKER_TOKEN>"
+                "value": "Bearer {{brokerToken}}"
               }
             ],
             "url": {
-              "raw": "http://13.48.136.109:5000/api/broker/farmer-orders",
-              "protocol": "http",
+              "raw": "{{baseUrl}}/api/broker/buy-orders/active-to-farmers",
               "host": [
-                "13",
-                "48",
-                "136",
-                "109"
+                "{{baseUrl}}"
               ],
-              "port": "5000",
               "path": [
                 "api",
                 "broker",
-                "farmer-orders"
+                "buy-orders",
+                "active-to-farmers"
               ]
             }
           }
@@ -437,52 +534,18 @@
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer <BROKER_TOKEN>"
+                "value": "Bearer {{brokerToken}}"
               }
             ],
             "url": {
-              "raw": "http://13.48.136.109:5000/api/broker/buyer-orders",
-              "protocol": "http",
+              "raw": "{{baseUrl}}/api/broker/buyer-orders",
               "host": [
-                "13",
-                "48",
-                "136",
-                "109"
+                "{{baseUrl}}"
               ],
-              "port": "5000",
               "path": [
                 "api",
                 "broker",
                 "buyer-orders"
-              ]
-            }
-          }
-        },
-        {
-          "name": "Show Interest in Order",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer <BROKER_TOKEN>"
-              }
-            ],
-            "url": {
-              "raw": "http://13.48.136.109:5000/api/broker/show-interest/<ORDER_ID>",
-              "protocol": "http",
-              "host": [
-                "13",
-                "48",
-                "136",
-                "109"
-              ],
-              "port": "5000",
-              "path": [
-                "api",
-                "broker",
-                "show-interest",
-                "<ORDER_ID>"
               ]
             }
           }
@@ -503,23 +566,18 @@
               },
               {
                 "key": "Authorization",
-                "value": "Bearer <BUYER_TOKEN>"
+                "value": "Bearer {{buyerToken}}"
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"vegetableId\": \"<VEGETABLE_ID>\",\n  \"quantity\": 50,\n  \"unit\": \"kg\",\n  \"pricePerUnit\": 160,\n  \"location\": \"Hotel XYZ, Colombo\",\n  \"quality\": \"premium\",\n  \"description\": \"Need fresh tomatoes for daily restaurant orders\",\n  \"deliveryDate\": \"2026-02-25\"\n}"
+              "raw": "{\n  \"vegetableId\": \"{{vegetableId}}\",\n  \"vegetableName\": \"Tomatoes\",\n  \"quantity\": 50,\n  \"unit\": \"kg\",\n  \"pricePerKg\": 160,\n  \"location\": \"Hotel XYZ, Colombo\",\n  \"deliveryDate\": \"2026-03-20\",\n  \"description\": \"Need fresh vegetables for daily restaurant orders\"\n}"
             },
             "url": {
-              "raw": "http://13.48.136.109:5000/api/buyer/publish-order",
-              "protocol": "http",
+              "raw": "{{baseUrl}}/api/buyer/publish-order",
               "host": [
-                "13",
-                "48",
-                "136",
-                "109"
+                "{{baseUrl}}"
               ],
-              "port": "5000",
               "path": [
                 "api",
                 "buyer",
@@ -535,95 +593,41 @@
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer <BUYER_TOKEN>"
+                "value": "Bearer {{buyerToken}}"
               }
             ],
             "url": {
-              "raw": "http://13.48.136.109:5000/api/buyer/my-orders",
-              "protocol": "http",
+              "raw": "{{baseUrl}}/api/orders",
               "host": [
-                "13",
-                "48",
-                "136",
-                "109"
+                "{{baseUrl}}"
               ],
-              "port": "5000",
               "path": [
                 "api",
-                "buyer",
-                "my-orders"
+                "orders"
               ]
             }
           }
         },
         {
-          "name": "View Broker Orders",
+          "name": "View Broker Sell Orders",
           "request": {
             "method": "GET",
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer <BUYER_TOKEN>"
+                "value": "Bearer {{buyerToken}}"
               }
             ],
             "url": {
-              "raw": "http://13.48.136.109:5000/api/buyer/broker-orders",
-              "protocol": "http",
+              "raw": "{{baseUrl}}/api/buyer/market-orders",
               "host": [
-                "13",
-                "48",
-                "136",
-                "109"
+                "{{baseUrl}}"
               ],
-              "port": "5000",
               "path": [
                 "api",
                 "buyer",
-                "broker-orders"
+                "market-orders"
               ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "Utilities",
-      "item": [
-        {
-          "name": "Health Check (Ping)",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "http://13.48.136.109:5000/api/ping",
-              "protocol": "http",
-              "host": [
-                "13",
-                "48",
-                "136",
-                "109"
-              ],
-              "port": "5000",
-              "path": [
-                "api",
-                "ping"
-              ]
-            }
-          }
-        },
-        {
-          "name": "API Info",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "http://13.48.136.109:5000",
-              "protocol": "http",
-              "host": [
-                "13",
-                "48",
-                "136",
-                "109"
-              ],
-              "port": "5000"
             }
           }
         }
