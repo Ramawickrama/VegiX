@@ -11,6 +11,12 @@ require('dotenv').config();
 // Support both MONGO_URI and MONGODB_URI (standard for MongoDB Atlas on Render/Heroku)
 const MONGO_URI = process.env.MONGO_URI || process.env.MONGODB_URI;
 
+// Normalize URL helper - trim whitespace and remove trailing slash
+const normalizeUrl = (url) => {
+    if (!url) return url;
+    return url.trim().replace(/\/$/, '');
+};
+
 // ─── Required variables ──────────────────────────────────────────────────────
 const REQUIRED = [
     { key: 'MONGO_URI', actual: MONGO_URI },
@@ -32,15 +38,13 @@ if (missing.length > 0) {
     process.exit(1);
 }
 
-// ─── Export typed config object ──────────────────────────────────────────────
+// ─── Export typed config object ──────────────────────────────────────────────────────
 module.exports = {
     PORT: parseInt(process.env.PORT, 10) || 5000,
     NODE_ENV: process.env.NODE_ENV || 'development',
     MONGO_URI: MONGO_URI,
     JWT_SECRET: process.env.JWT_SECRET,
-    CLIENT_URL: process.env.NODE_ENV === 'production' 
-        ? process.env.CLIENT_URL 
-        : (process.env.CLIENT_URL || 'http://13.48.136.109:3000'),
+    CLIENT_URL: normalizeUrl(process.env.CLIENT_URL),
 
     // Email (optional)
     EMAIL_SERVICE: process.env.EMAIL_SERVICE || 'gmail',

@@ -24,47 +24,63 @@ const server = http.createServer(app);
 // ─── CORS Configuration ──────────────────────────────────────────────────────
 const isProduction = config.NODE_ENV === 'production';
 
+// Normalize CLIENT_URL - trim whitespace and remove trailing slash
+const normalizeUrl = (url) => {
+    if (!url) return url;
+    return url.trim().replace(/\/$/, '');
+};
+
+const clientUrlNormalized = normalizeUrl(config.CLIENT_URL);
+
 let ALLOWED_ORIGINS = [];
 
 if (isProduction) {
-  if (!config.CLIENT_URL) {
-    console.error(`\n❌ FATAL ERROR: CLIENT_URL is missing in production environment.\nPlease set CLIENT_URL to your frontend domain in the environment variables.\n`);
-    process.exit(1);
-  }
-  ALLOWED_ORIGINS = [config.CLIENT_URL];
+    if (!clientUrlNormalized) {
+        console.error(`\n❌ FATAL ERROR: CLIENT_URL is missing in production environment.\nPlease set CLIENT_URL to your frontend domain in the environment variables.\n`);
+        process.exit(1);
+    }
+    ALLOWED_ORIGINS = [clientUrlNormalized];
 } else {
-  // In development, allow various localhost ports
-  const devOrigins = [
-    config.CLIENT_URL,
-    'http://localhost:3000',
-    'http://localhost:3001',
-    'http://localhost:3002',
-    'http://localhost:5173',
-    'http://127.0.0.1:3000',
-    'http://127.0.0.1:3001',
-    'http://127.0.0.1:5173',
-  ];
-  devOrigins.forEach(origin => {
-    if (origin && !ALLOWED_ORIGINS.includes(origin)) ALLOWED_ORIGINS.push(origin);
-  });
+    // In development, allow various localhost ports + configured client URL
+    const devOrigins = [
+        clientUrlNormalized,
+        'http://localhost:3000',
+        'http://localhost:3001',
+        'http://localhost:3002',
+        'http://localhost:5173',
+        'http://127.0.0.1:3000',
+        'http://127.0.0.1:3001',
+        'http://127.0.0.1:5173',
+    ];
+    devOrigins.forEach(origin => {
+        if (origin && !ALLOWED_ORIGINS.includes(origin)) ALLOWED_ORIGINS.push(origin);
+    });
 }
 
 const corsOptions = {
-  origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps, curl, Postman)
-    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
-      callback(null, true);
-    } else {
-      console.warn(`[CORS] Blocked origin: ${origin}`);
-      callback(new Error(`CORS policy: origin ${origin} not allowed`));
-    }
-  },
-  credentials: false, // JWT header auth is used, cookies are not
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+    origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps, curl, Postman)
+        if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+            callback(null, true);
+        } else {
+            console.warn(`[CORS] Blocked origin: ${origin}`);
+            callback(new Error(`CORS policy: origin ${origin} not allowed`));
+        }
+    },
+    credentials: false, // JWT header auth is used, cookies are not
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
-console.log(`[CORS] Allowed origins: ${ALLOWED_ORIGINS.join(', ')}`);
+// Startup logging
+console.log(`\n═══════════════════════════════════════`);
+console.log(`  ENVIRONMENT CONFIG`);
+console.log(`═══════════════════════════════════════`);
+console.log(`  NODE_ENV: ${config.NODE_ENV}`);
+console.log(`  PORT: ${config.PORT}`);
+console.log(`  CLIENT_URL: ${clientUrlNormalized}`);
+console.log(`  ALLOWED_ORIGINS: ${ALLOWED_ORIGINS.join(', ')}`);
+console.log(`═══════════════════════════════════════\n`);
 
 // Apply CORS to Express
 app.use(cors(corsOptions));
