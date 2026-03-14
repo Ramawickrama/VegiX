@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { onNotification } from '../services/socketService';
+import API from '../services/api';
 import './NotificationBell.css';
-import { API_BASE_URL } from '../services/api';
 
 const NotificationBell = ({ userId }) => {
   const [notifications, setNotifications] = useState([]);
@@ -25,13 +25,9 @@ const NotificationBell = ({ userId }) => {
 
   const fetchNotifications = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${API_BASE_URL}/api/notifications`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await response.json();
-      setNotifications(data.notifications || []);
-      setUnreadCount(data.unread || 0);
+      const response = await API.get('/notifications');
+      setNotifications(response.data.notifications || []);
+      setUnreadCount(response.data.unread || 0);
     } catch (error) {
       console.error('Error fetching notifications:', error);
     }
@@ -40,11 +36,7 @@ const NotificationBell = ({ userId }) => {
   const handleNotificationClick = async (notification) => {
     if (!notification.isRead) {
       try {
-        const token = localStorage.getItem('token');
-        await fetch(`${API_BASE_URL}/api/notifications/${notification._id}/read`, {
-          method: 'PUT',
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await API.put(`/notifications/${notification._id}/read`);
         setUnreadCount((prev) => Math.max(0, prev - 1));
       } catch (error) {
         console.error('Error marking notification as read:', error);
@@ -54,11 +46,7 @@ const NotificationBell = ({ userId }) => {
 
   const handleMarkAllAsRead = async () => {
     try {
-      const token = localStorage.getItem('token');
-      await fetch(`${API_BASE_URL}/api/notifications/read-all`, {
-        method: 'PUT',
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await API.put('/notifications/read-all');
       setUnreadCount(0);
     } catch (error) {
       console.error('Error marking all as read:', error);

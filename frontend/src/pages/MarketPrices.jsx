@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/AdminPages.css';
-import API from '../services/api';
+import API, { API_BASE_URL } from '../services/api';
 
 const MarketPrices = () => {
   const [vegetables, setVegetables] = useState([]);
@@ -71,16 +71,14 @@ const fetchData = async () => {
     
     try {
       setUploading(true);
-      const token = localStorage.getItem('token');
       const formData = new FormData();
       formData.append('image', selectedImage);
       
-      const res = await axios.post(
-        `${API_BASE_URL}/api/vegetables/${imageVeg._id}/image`,
+      await API.post(
+        `/vegetables/${imageVeg._id}/image`,
         formData,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data'
           }
         }
@@ -114,13 +112,10 @@ const fetchData = async () => {
 
   const updateIndividualPrice = async (veg) => {
     try {
-      const token = localStorage.getItem('token');
-      await axios.put(`${API_BASE_URL}/api/admin/vegetables/${veg._id}/price`, {
+      await API.put(`/admin/vegetables/${veg._id}/price`, {
         currentPrice: parseFloat(veg.editablePrice),
         minPrice: parseFloat(veg.editableMin),
         maxPrice: parseFloat(veg.editableMax)
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
       });
 
       setSuccess(`Updated ${veg.name} successfully!`);
@@ -134,8 +129,7 @@ const fetchData = async () => {
   const handleAddVegetable = async (e) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem('token');
-      await axios.post(`${API_BASE_URL}/api/admin/vegetables`, {
+      await API.post('/admin/vegetables', {
         name: newVeg.name,
         nameSi: newVeg.nameSi,
         nameTa: newVeg.nameTa,
@@ -143,8 +137,6 @@ const fetchData = async () => {
         currentPrice: newVeg.price,
         minPrice: newVeg.min,
         maxPrice: newVeg.max
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
       });
 
       setSuccess('New vegetable added!');
@@ -164,14 +156,11 @@ const fetchData = async () => {
   const handleUpdateVegetable = async (e) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem('token');
-      await axios.put(`${API_BASE_URL}/api/admin/vegetables/${editingVeg._id}`, {
+      await API.put(`/admin/vegetables/${editingVeg._id}`, {
         name: editingVeg.name,
         nameSi: editingVeg.nameSi,
         nameTa: editingVeg.nameTa,
         category: editingVeg.category
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
       });
 
       setSuccess('Vegetable updated successfully!');

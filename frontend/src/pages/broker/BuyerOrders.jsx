@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-
-const API_BASE = "/api";
+import API from "../services/api";
 
 export default function BuyerOrders() {
   // State initialization - ALWAYS as arrays
@@ -19,26 +18,16 @@ export default function BuyerOrders() {
 
   const navigate = useNavigate();
 
-  // Safe fetch wrapper
-  const safeFetch = async (url, options = {}) => {
-    const token = localStorage.getItem("token");
-    const response = await fetch(url, {
-      ...options,
-      headers: {
-        ...options.headers,
-        Authorization: `Bearer ${token}`
-      }
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
+  // Safe API wrapper using centralized axios client
+  const safeApiCall = async (method, url, data = null) => {
+    const response = await API[method](url, data);
+    return response.data;
   };
 
   // Fetch vegetables - handle response format { success, data }
   const fetchVegetables = useCallback(async () => {
     try {
-      const data = await safeFetch(`${API_BASE}/vegetables`);
+      const data = await safeApiCall('get', '/vegetables');
       // Handle both direct array and { data: [] } formats
       const vegArray = Array.isArray(data) ? data : (data?.data || []);
       setVegetables(vegArray);
@@ -61,9 +50,9 @@ export default function BuyerOrders() {
       if (district) params.append("district", district);
 
       const queryString = params.toString();
-      const url = `${API_BASE}/buyer-orders${queryString ? "?" + queryString : ""}`;
+      const url = `/buyer-orders${queryString ? "?" + queryString : ""}`;
 
-      const data = await safeFetch(url);
+      const data = await safeApiCall('get', url);
       
       // Handle both { orders: [] } and direct array formats
       let ordersArray = [];

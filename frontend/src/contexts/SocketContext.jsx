@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { io } from 'socket.io-client';
-import { API_BASE, API_BASE_URL } from '../services/api';
+import API from '../services/api';
 
 const SocketContext = createContext(null);
 
@@ -72,10 +72,8 @@ export const SocketProvider = ({ children }) => {
         }
 
         // Fetch initial unread message count
-        fetch(`${API_BASE_URL}/api/chat/unread`, {
-          headers: { Authorization: `Bearer ${token}` }
-        })
-          .then(res => res.json())
+        API.get('/chat/unread')
+          .then(res => res.data)
           .then(data => {
             if (data.success) {
               setUnreadCount(data.unreadCount || 0);
@@ -221,12 +219,8 @@ export const SocketProvider = ({ children }) => {
 
   const refreshUnreadMessageCount = useCallback(async () => {
     try {
-      const token = localStorage.getItem('token');
-      if (!token) return;
-      const res = await fetch(`${API_BASE_URL}/api/chat/unread`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      const data = await res.json();
+      const res = await API.get('/chat/unread');
+      const data = res.data;
       if (data.success) {
         setUnreadMessageCount(data.unreadCount || 0);
       }

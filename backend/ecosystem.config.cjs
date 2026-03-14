@@ -2,8 +2,8 @@ module.exports = {
   apps: [
     {
       name: 'vegix-backend',
-      script: 'backend/server.js',
-      cwd: '.',
+      script: 'server.js',
+      cwd: './backend',
       instances: 1,
       autorestart: true,
       watch: false,
@@ -11,9 +11,9 @@ module.exports = {
       env: {
         NODE_ENV: 'production',
         PORT: 5000,
+        CLIENT_URL: 'http://13.48.136.109:3000',
         MONGO_URI: process.env.MONGO_URI,
-        JWT_SECRET: process.env.JWT_SECRET,
-        FRONTEND_URL: process.env.FRONTEND_URL || 'http://13.48.136.109:3000'
+        JWT_SECRET: process.env.JWT_SECRET
       },
       error_file: 'logs/backend-error.log',
       out_file: 'logs/backend-out.log',
@@ -23,8 +23,8 @@ module.exports = {
     {
       name: 'vegix-frontend',
       script: 'npm',
-      args: '--prefix frontend run preview -- --port 3000 --host',
-      cwd: '.',
+      args: 'run preview -- --port 3000 --host',
+      cwd: './frontend',
       instances: 1,
       autorestart: true,
       watch: false,
