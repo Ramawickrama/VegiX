@@ -1,12 +1,12 @@
 import axios from "axios";
 
-export const API_BASE = (import.meta.env.VITE_API_URL || "http://localhost:5000").replace(/\/$/, "");
+export const API_BASE = (import.meta.env.VITE_API_URL || "http://13.48.136.109:5000").replace(/\/$/, "");
 
 export const API_BASE_URL = `${API_BASE}/api`;
 
 export const api = axios.create({
     baseURL: API_BASE_URL,
-    withCredentials: true
+    withCredentials: false // Disabled to match backend CORS credentials:false (JWT header auth used)
 });
 
 api.interceptors.request.use((config) => {

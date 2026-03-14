@@ -17,6 +17,10 @@ const REQUIRED = [
     { key: 'JWT_SECRET', actual: process.env.JWT_SECRET },
 ];
 
+if (process.env.NODE_ENV === 'production') {
+    REQUIRED.push({ key: 'CLIENT_URL', actual: process.env.CLIENT_URL });
+}
+
 const missing = REQUIRED.filter((item) => !item.actual);
 
 if (missing.length > 0) {
@@ -34,7 +38,9 @@ module.exports = {
     NODE_ENV: process.env.NODE_ENV || 'development',
     MONGO_URI: MONGO_URI,
     JWT_SECRET: process.env.JWT_SECRET,
-    CLIENT_URL: process.env.CLIENT_URL || 'http://13.48.136.109:3000',
+    CLIENT_URL: process.env.NODE_ENV === 'production' 
+        ? process.env.CLIENT_URL 
+        : (process.env.CLIENT_URL || 'http://13.48.136.109:3000'),
 
     // Email (optional)
     EMAIL_SERVICE: process.env.EMAIL_SERVICE || 'gmail',

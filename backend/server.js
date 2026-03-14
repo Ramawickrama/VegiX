@@ -22,11 +22,20 @@ const app = express();
 const server = http.createServer(app);
 
 // ─── CORS Configuration ──────────────────────────────────────────────────────
-const ALLOWED_ORIGINS = [config.CLIENT_URL];
+const isProduction = config.NODE_ENV === 'production';
 
-// In development, allow various localhost ports
-if (config.NODE_ENV !== 'production') {
+let ALLOWED_ORIGINS = [];
+
+if (isProduction) {
+  if (!config.CLIENT_URL) {
+    console.error(`\n❌ FATAL ERROR: CLIENT_URL is missing in production environment.\nPlease set CLIENT_URL to your frontend domain in the environment variables.\n`);
+    process.exit(1);
+  }
+  ALLOWED_ORIGINS = [config.CLIENT_URL];
+} else {
+  // In development, allow various localhost ports
   const devOrigins = [
+    config.CLIENT_URL,
     'http://localhost:3000',
     'http://localhost:3001',
     'http://localhost:3002',
@@ -34,12 +43,9 @@ if (config.NODE_ENV !== 'production') {
     'http://127.0.0.1:3000',
     'http://127.0.0.1:3001',
     'http://127.0.0.1:5173',
-    'http://13.48.136.109:3000',
-    'http://172.31.36.202:3000',
-
   ];
   devOrigins.forEach(origin => {
-    if (!ALLOWED_ORIGINS.includes(origin)) ALLOWED_ORIGINS.push(origin);
+    if (origin && !ALLOWED_ORIGINS.includes(origin)) ALLOWED_ORIGINS.push(origin);
   });
 }
 
@@ -53,10 +59,12 @@ const corsOptions = {
       callback(new Error(`CORS policy: origin ${origin} not allowed`));
     }
   },
-  credentials: true,
+  credentials: false, // JWT header auth is used, cookies are not
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
+
+console.log(`[CORS] Allowed origins: ${ALLOWED_ORIGINS.join(', ')}`);
 
 // Apply CORS to Express
 app.use(cors(corsOptions));
@@ -74,7 +82,7 @@ const io = socketio(server, {
       }
     },
     methods: ['GET', 'POST'],
-    credentials: true,
+    credentials: false,
   }
 });
 
@@ -86,6 +94,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // ─── Markdown Docs Router ───────────────────────────────────────────────────
 // Allows access to Markdown (.md) files in the project via ${API_BASE}/*.md
 app.get('/*.md', (req, res) => {
+  if (config.NODE_ENV === 'production') {
+    return res.status(404).json({ error: 'Markdown files are not accessible in production' });
+  }
+
   const filePathParam = req.path; // e.g., '/README.md'
   if (!filePathParam.endsWith('.md')) {
     return res.status(403).json({ error: 'Only markdown (.md) files are accessible' });

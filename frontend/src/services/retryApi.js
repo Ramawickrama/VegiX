@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://13.48.136.109:5000";
 
 const API = axios.create({
   baseURL: API_BASE_URL.endsWith('/api') ? API_BASE_URL : `${API_BASE_URL}/api`,
-  withCredentials: true,
+  withCredentials: false, // Disabled to match backend CORS credentials:false (JWT header auth used)
   timeout: 30000,
 });
 
