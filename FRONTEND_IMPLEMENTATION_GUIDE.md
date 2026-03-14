@@ -141,7 +141,7 @@ const FarmerOrderForm = () => {
       const token = localStorage.getItem('token');
       
       const response = await axios.post(
-        '/api/farmer/publish-order',
+        'http://13.48.136.109:5000/api/farmer/publish-order',
         {
           vegetableId: formData.vegetableId,
           quantity: parseFloat(formData.quantity),
@@ -534,7 +534,7 @@ const NotificationCenter = () => {
   const fetchNotifications = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('/api/notifications?limit=10', {
+      const response = await axios.get('http://13.48.136.109:5000/api/notifications?limit=10', {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -563,7 +563,7 @@ const NotificationCenter = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.delete(
-        `/api/notifications/${notificationId}`,
+        `http://13.48.136.109:5000/api/notifications/${notificationId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       fetchNotifications(); // Refresh list
@@ -686,7 +686,7 @@ const BrokerSellingOrderForm = () => {
       const token = localStorage.getItem('token');
       
       const response = await axios.post(
-        '/api/broker/publish-sell-order',
+        'http://13.48.136.109:5000/api/broker/publish-sell-order',
         {
           vegetableId: formData.vegetableId,
           quantity: parseFloat(formData.quantity),

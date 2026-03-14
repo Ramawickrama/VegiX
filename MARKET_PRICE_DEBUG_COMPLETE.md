@@ -45,7 +45,7 @@ Correct API response parsing:
 
 ```javascript
 // ✅ CORRECT (Fixed Code)
-const response = await axios.get('/api/vegetables');
+const response = await axios.get('http://13.48.136.109:5000/api/vegetables');
 setVegetables(response.data.data || []);
 //               └─ axios response
 //                    └─ API response wrapper
@@ -69,7 +69,7 @@ setVegetables(response.data.data || []);
 const fetchVegetables = async () => {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get('http://localhost:5000/api/vegetables', {
+    const response = await axios.get('http://13.48.136.109:5000/api/vegetables', {
       headers: { Authorization: `Bearer ${token}` },
     });
     // API returns { success, count, data: [...] }
@@ -94,7 +94,7 @@ const fetchVegetablesAndPrices = async () => {
   try {
     const token = localStorage.getItem('token');
     
-    const vegResponse = await axios.get('http://localhost:5000/api/vegetables', {
+    const vegResponse = await axios.get('http://13.48.136.109:5000/api/vegetables', {
       headers: { Authorization: `Bearer ${token}` },
     });
     // API returns { success, count, data: [...] }
@@ -115,7 +115,7 @@ const fetchVegetablesAndPrices = async () => {
   try {
     const token = localStorage.getItem('token');
     
-    const vegResponse = await axios.get('http://localhost:5000/api/vegetables', {
+    const vegResponse = await axios.get('http://13.48.136.109:5000/api/vegetables', {
       headers: { Authorization: `Bearer ${token}` },
     });
     // API returns { success, count, data: [...] }

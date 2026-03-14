@@ -285,7 +285,7 @@ cd backend && npm run dev
 
 **Test Server:**
 ```bash
-curl http://localhost:5000/api/ping
+curl ${API_BASE_URL}/api/ping
 ```
 
 **Stop Server:**

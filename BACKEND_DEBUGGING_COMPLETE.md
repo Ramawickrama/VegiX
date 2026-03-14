@@ -171,7 +171,7 @@ npm run dev  # Uses nodemon for auto-reload
 ### Test API
 ```bash
 # Health check
-curl http://localhost:5000/api/ping
+curl http://13.48.136.109:5000/api/ping
 
 # Response
 {

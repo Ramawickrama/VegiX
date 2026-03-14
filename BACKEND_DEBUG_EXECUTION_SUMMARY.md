@@ -321,7 +321,7 @@ npm run dev
 
 ### Test API
 ```bash
-curl http://localhost:5000/api/ping
+curl ${API_BASE_URL}/api/ping
 ```
 
 ### Stop Backend

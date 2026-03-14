@@ -199,7 +199,7 @@ npm start  # Without nodemon
 ### Test API
 ```bash
 # Test server is running
-curl http://localhost:5000/api/ping
+curl ${API_BASE_URL}/api/ping
 
 # Response:
 {
@@ -455,7 +455,7 @@ All required dependencies are installed:
 
 2. **Test frontend integration:**
    - Start frontend: `npm run dev` in frontend directory
-   - Connect to backend: `http://localhost:5000`
+   - Connect to backend: `http://13.48.136.109:5000/`
 
 3. **Monitor logs:**
    - Check for any runtime errors

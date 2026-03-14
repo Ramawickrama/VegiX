@@ -207,12 +207,12 @@ const [
   noticesRes,
   notificationsRes
 ] = await Promise.all([
-  axios.get('/api/farmer/dashboard-stats', { headers }),
-  axios.get('/api/farmer/my-orders', { headers }),
-  axios.get('/api/farmer/broker-orders', { headers }),
-  axios.get('/api/farmer/market-prices', { headers }),
-  axios.get('/api/farmer/notices', { headers }),
-  axios.get('/api/farmer/notifications', { headers }),
+  axios.get('http://13.48.136.109:5000/api/farmer/dashboard-stats', { headers }),
+  axios.get('http://13.48.136.109:5000/api/farmer/my-orders', { headers }),
+  axios.get('http://13.48.136.109:5000/api/farmer/broker-orders', { headers }),
+  axios.get('http://13.48.136.109:5000/api/farmer/market-prices', { headers }),
+  axios.get('http://13.48.136.109:5000/api/farmer/notices', { headers }),
+  axios.get('http://13.48.136.109:5000/api/farmer/notifications', { headers }),
 ]);
 ```
 
@@ -431,15 +431,15 @@ npm run dev
 ### Test Endpoints with Curl
 ```bash
 # Get market prices
-curl http://localhost:5000/api/farmer/market-prices \
+curl http://13.48.136.109:5000/api/farmer/market-prices \
   -H "Authorization: Bearer YOUR_TOKEN"
 
 # Get dashboard stats
-curl http://localhost:5000/api/farmer/dashboard-stats \
+curl http://13.48.136.109:5000/api/farmer/dashboard-stats \
   -H "Authorization: Bearer YOUR_TOKEN"
 
 # Get high-demand vegetables
-curl http://localhost:5000/api/analytics/high-demand \
+curl http://13.48.136.109:5000/api/analytics/high-demand \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 

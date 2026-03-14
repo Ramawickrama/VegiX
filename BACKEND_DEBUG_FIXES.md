@@ -207,7 +207,7 @@ npm run dev  # Uses nodemon for auto-restart
 ### Step 2: Test API Endpoints
 ```bash
 # Test server is alive
-curl http://localhost:5000/api/ping
+curl http://13.48.136.109:5000/api/ping
 
 # Expected response:
 {
@@ -220,7 +220,7 @@ curl http://localhost:5000/api/ping
 ### Step 3: Test Authentication
 ```bash
 # Register a user
-curl -X POST http://localhost:5000/api/auth/register \
+curl -X POST http://13.48.136.109:5000/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Test User",
@@ -236,7 +236,7 @@ curl -X POST http://localhost:5000/api/auth/register \
 ### Step 4: Test Protected Routes
 ```bash
 # Get vegetables (requires auth)
-curl http://localhost:5000/api/vegetables \
+curl http://13.48.136.109:5000/api/vegetables \
   -H "Authorization: Bearer YOUR_TOKEN_HERE"
 
 # Expected: 200 OK with vegetable list

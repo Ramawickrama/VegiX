@@ -115,7 +115,7 @@ const fetchVegetables = async () => {
     }
 
     const response = await axios.get(
-      'http://localhost:5000/api/vegetables',
+      'http://13.48.136.109:5000/api/vegetables',
       { headers: { Authorization: `Bearer ${token}` } }
     );
 
@@ -131,7 +131,7 @@ const fetchVegetables = async () => {
 };
 ```
 
-**API Endpoint:** `GET http://localhost:5000/api/vegetables`  
+**API Endpoint:** `GET http://13.48.136.109:5000/api/vegetables`  
 **Response Format:** `{ success: boolean, count: number, data: Vegetable[] }`  
 **Vegetable Object:** `{ _id, vegetableId, name, category, defaultUnit }`
 
@@ -145,7 +145,7 @@ const fetchMarketPrices = async () => {
     if (!token) return;
 
     const response = await axios.get(
-      'http://localhost:5000/api/admin/market-prices',
+      'http://13.48.136.109:5000/api/admin/market-prices',
       { headers: { Authorization: `Bearer ${token}` } }
     );
 
@@ -170,7 +170,7 @@ const fetchMarketPrices = async () => {
 };
 ```
 
-**API Endpoint:** `GET http://localhost:5000/api/admin/market-prices`  
+**API Endpoint:** `GET http://13.48.136.109:5000/api/admin/market-prices`  
 **Response Format:** `{ total: number, prices: MarketPrice[] }`  
 **Price Map Structure:** `{ [vegetableId]: { price, unit, change } }`
 

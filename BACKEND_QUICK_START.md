@@ -28,7 +28,7 @@ npm run dev
 ## Test Server
 
 ```bash
-curl http://localhost:5000/api/ping
+curl http://13.48.136.109:5000/api/ping
 ```
 
 ## Port in Use?

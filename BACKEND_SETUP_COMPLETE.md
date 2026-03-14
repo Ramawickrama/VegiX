@@ -60,7 +60,7 @@ Backend server (server.js) is fully configured with:
 ## 🌐 API Base URL
 
 ```
-http://localhost:5000
+http://13.48.136.109:5000
 ```
 
 ### Available Endpoints
@@ -101,7 +101,7 @@ The following MongoDB collections will be created automatically:
 
 ### Test 1: Ping Endpoint
 ```bash
-curl http://localhost:5000/api/ping
+curl http://13.48.136.109:5000/api/ping
 ```
 **Expected Response:**
 ```json
@@ -114,7 +114,7 @@ curl http://localhost:5000/api/ping
 
 ### Test 2: Root Endpoint
 ```bash
-curl http://localhost:5000
+curl http://13.48.136.109:5000
 ```
 **Expected Response:**
 ```json
@@ -122,13 +122,13 @@ curl http://localhost:5000
   "message": "VegiX - Sri Lanka Vegetable Market System",
   "version": "1.0.0",
   "endpoints": {
-    "auth": "/api/auth",
-    "admin": "/api/admin",
-    "farmer": "/api/farmer",
-    "broker": "/api/broker",
-    "buyer": "/api/buyer",
-    "feedback": "/api/feedback",
-    "ping": "/api/ping"
+    "auth": "http://13.48.136.109:5000/api/auth",
+    "admin": "http://13.48.136.109:5000/api/admin",
+    "farmer": "http://13.48.136.109:5000/api/farmer",
+    "broker": "http://13.48.136.109:5000/api/broker",
+    "buyer": "http://13.48.136.109:5000/api/buyer",
+    "feedback": "http://13.48.136.109:5000/api/feedback",
+    "ping": "http://13.48.136.109:5000/api/ping"
   }
 }
 ```
@@ -269,7 +269,7 @@ npm run dev
 ```
 
 ### 3. Frontend Will Connect to Backend
-The frontend is configured to call API at `http://localhost:5000`
+The frontend is configured to call API at `http://13.48.136.109:5000`
 
 ### 4. Test Complete Flow
 1. Open http://localhost:3000
@@ -338,7 +338,7 @@ npm run dev
 Frontend (http://localhost:3000)
         ↓ (API Calls via Axios)
         ↓
-Express Server (http://localhost:5000)
+Express Server (http://13.48.136.109:5000)
         ↓ (Database Operations)
         ↓
 MongoDB Atlas Cluster
