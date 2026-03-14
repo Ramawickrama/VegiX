@@ -92,7 +92,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ─── Markdown Docs Router ───────────────────────────────────────────────────
-// Allows access to Markdown (.md) files in the project via ${API_BASE}/*.md
+// Allows access to Markdown (.md) files in backend/docs/ via ${API_BASE}/*.md
 app.get('/*.md', (req, res) => {
   if (config.NODE_ENV === 'production') {
     return res.status(404).json({ error: 'Markdown files are not accessible in production' });
@@ -103,13 +103,13 @@ app.get('/*.md', (req, res) => {
     return res.status(403).json({ error: 'Only markdown (.md) files are accessible' });
   }
 
-  // Serve from project root directory
-  const rootDir = path.join(__dirname, '..');
+  // Serve from backend/docs directory
+  const docsDir = path.join(__dirname, 'docs');
   // decodeURI to handle spaces, etc.
-  const absolutePath = path.resolve(rootDir, decodeURIComponent(filePathParam.slice(1))); // remove leading slash
+  const absolutePath = path.resolve(docsDir, decodeURIComponent(filePathParam.slice(1))); // remove leading slash
 
-  // Security check: Prevent directory traversal outside of rootDir
-  if (!absolutePath.startsWith(rootDir)) {
+  // Security check: Prevent directory traversal outside of docsDir
+  if (!absolutePath.startsWith(docsDir)) {
     return res.status(403).json({ error: 'Access denied' });
   }
 
